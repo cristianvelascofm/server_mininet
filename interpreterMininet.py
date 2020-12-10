@@ -39,13 +39,11 @@ port_container = []
 net = Mininet(build=None)
 
 def traffic_udp_simple():
-    print ("fasfsad")
     file = open("udp.sh", "w")
     file.write("iperfudp"+'\n')
     file.close()
 
 def traffic_tcp_total():
-    print("aqui 1")
     aux = ""
     for x in host_container:
         for y in host_container:
@@ -53,10 +51,8 @@ def traffic_tcp_total():
     file = open("tcp.sh", "w")         
     file.write(aux)
     file.close()
-    return "Algo"
 
 def traffic_udp_total():
-    print(" aqui 2")
     aux = ""
     for x in host_container:
         for y in host_container:
@@ -239,7 +235,7 @@ def interpreter(json_data, connection):
 
     elif ('pingallG' in json_data) and (not 'TCPG' in json_data) and (not 'UDPG' in json_data):
         print('Ping All')
-        charge = int(json_data['pingall'])
+        charge = int(json_data['pingallG'])
         for c in range(charge):
             net.pingAll()
 
@@ -252,14 +248,8 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP')
-        charge = int(json_data['TCP'])
-        aux = ""
-        for x in host_container:
-            for y in host_container:
-                aux = aux +"iperf "+str(x) +" "+ str(y) + "\n"
-        file = open("tcp.sh", "w")         
-        file.write(aux)
-        file.close()
+        charge = int(json_data['TCPG'])
+        traffic_tcp_total()
         for c in range(charge):
             CLI(net,script= "tcp.sh")
 
@@ -272,7 +262,7 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data  and not 'TCPG' in json_data and 'UDPG' in json_data:
         print('UDP')
-        charge = int(json_data['UDP'])
+        charge = int(json_data['UDPG'])
         traffic_udp_total()
         for c in range(charge):
             CLI(net,script= "udp.sh")
@@ -286,7 +276,7 @@ def interpreter(json_data, connection):
 
     elif 'pingallG' in json_data  and 'TCPG' in json_data  and not 'UDPG' in json_data:
         print('Ping All - TCP')
-        charge = int(json_data['pingall'])
+        charge = int(json_data['pingallG'])
         traffic_tcp_total()
         for c in range(charge):
             net.pingAll()
@@ -301,7 +291,7 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data  and 'TCPG' in json_data and 'UDPG' in json_data:
         print('TCP - UDP')
-        charge = int(json_data['TCP'])
+        charge = int(json_data['TCPG'])
         traffic_tcp_total()
         traffic_udp_total()
         for c in range(charge):
@@ -319,7 +309,7 @@ def interpreter(json_data, connection):
     elif 'pingallG' in json_data and not 'TCPG' in json_data and 'UDPG' in json_data:
         print('Ping All - UDP')
         traffic_udp_total()
-        charge = int(json_data['pingall'])
+        charge = int(json_data['pingallG'])
         for c in range(charge):
             net.pingAll()
             CLI(net,script= "udp.sh")
@@ -335,7 +325,7 @@ def interpreter(json_data, connection):
         print('Ping All - TCP - UDP')
         traffic_tcp_total()
         traffic_udp_total()
-        charge = int(json_data['pingall'])
+        charge = int(json_data['pingallG'])
         for c in range(charge):
             net.pingAll()
             CLI(net,script= "tcp.sh")
