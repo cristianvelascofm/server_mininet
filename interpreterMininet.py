@@ -253,8 +253,13 @@ def interpreter(json_data, connection):
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP')
         charge = int(json_data['TCP'])
-        bandera = traffic_tcp_total()
-        print ("algo de texto ",bandera)
+        aux = ""
+        for x in host_container:
+            for y in host_container:
+                aux = aux +"iperf "+str(x) +" "+ str(y) + "\n"
+        file = open("tcp.sh", "w")         
+        file.write(aux)
+        file.close()
         for c in range(charge):
             CLI(net,script= "tcp.sh")
 
