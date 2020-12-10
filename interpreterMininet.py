@@ -39,11 +39,13 @@ port_container = []
 net = Mininet(build=None)
 
 def traffic_udp_simple():
+    print ("fasfsad")
     file = open("udp.sh", "w")
     file.write("iperfudp"+'\n')
     file.close()
 
 def traffic_tcp_total():
+    print("aqui 1")
     aux = ""
     for x in host_container:
         for y in host_container:
@@ -53,6 +55,7 @@ def traffic_tcp_total():
     file.close()
 
 def traffic_udp_total():
+    print(" aqui 2")
     aux = ""
     for x in host_container:
         for y in host_container:
