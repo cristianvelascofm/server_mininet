@@ -47,7 +47,10 @@ def traffic_tcp_total():
     aux = ""
     for x in host_container:
         for y in host_container:
-            aux = aux +"iperf "+str(x) +" "+ str(y) + "\n"
+            if str(x)==str(y):
+                pass
+            else:
+                aux = aux +"iperf "+str(x) +" "+ str(y) + "\n"
     file = open("tcp.sh", "w")         
     file.write(aux)
     file.close()
@@ -56,7 +59,10 @@ def traffic_udp_total():
     aux = ""
     for x in host_container:
         for y in host_container:
-            aux = aux +"iperfudp "+str(x) +" "+ str(y) + "\n"
+            if str(x)==str(y):
+                pass
+            else:
+                aux = aux +"iperfudp "+str(x) +" "+ str(y) + "\n"
     file = open("udp.sh", "w")         
     file.write(aux)
     file.close()
