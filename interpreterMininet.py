@@ -38,7 +38,28 @@ port_container = []
 # Creacion de la red en Mininet
 net = Mininet(build=None)
 
+def traffic_udp_simple():
+    file = open("udp.sh", "w")
+    file.write("iperfudp"+'\n')
+    file.close()
 
+def traffic_tcp_total():
+    aux = ""
+    for x in host_container:
+        for y in host_container:
+            aux = aux +"iperf "+str(x) +" "+ str(y) + "\n"
+    file = open("tcp.sh", "w")         
+    file.write(aux)
+    file.close()
+
+def traffic_udp_total():
+    aux = ""
+    for x in host_container:
+        for y in host_container:
+            aux = aux +"iperfudp "+str(x) +" "+ str(y) + "\n"
+    file = open("udp.sh", "w")         
+    file.write(aux)
+    file.close()
 
 def run_mininet():
 
@@ -101,6 +122,15 @@ def interpreter(json_data, connection):
             connection.sendall(f.encode())
             ans = {}
             return False
+
+    elif 'wireshark' in json_data:
+        w.start()
+        ans = {}
+        ans['wireshark'] = 'lanzado'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
         
     elif ('pingall' in json_data) and (not 'TCP' in json_data) and (not 'UDP' in json_data):
         print('Ping All')
@@ -131,6 +161,7 @@ def interpreter(json_data, connection):
     elif not 'pingall' in json_data  and not 'TCP' in json_data and 'UDP' in json_data:
         print('UDP')
         charge = int(json_data['UDP'])
+        traffic_udp_simple()
         for c in range(charge):
             CLI(net,script= "udp.sh")
 
@@ -158,6 +189,7 @@ def interpreter(json_data, connection):
     elif not 'pingall' in json_data  and 'TCP' in json_data and 'UDP' in json_data:
         print('TCP - UDP')
         charge = int(json_data['TCP'])
+        traffic_udp_simple()
         for c in range(charge):
             
             net.iperf()
@@ -172,6 +204,7 @@ def interpreter(json_data, connection):
 
     elif 'pingall' in json_data and not 'TCP' in json_data and 'UDP' in json_data:
         print('Ping All - UDP')
+        traffic_udp_simple()
         charge = int(json_data['pingall'])
         for c in range(charge):
             net.pingAll()
@@ -186,6 +219,7 @@ def interpreter(json_data, connection):
 
     elif 'pingall' in json_data and 'TCP' in json_data and 'UDP' in json_data:
         print('Ping All - TCP - UDP')
+        traffic_udp_simple()
         charge = int(json_data['pingall'])
         for c in range(charge):
             net.pingAll()
@@ -198,6 +232,112 @@ def interpreter(json_data, connection):
         connection.sendall(f.encode())
         ans = {}
         return True
+
+    elif ('pingallG' in json_data) and (not 'TCPG' in json_data) and (not 'UDPG' in json_data):
+        print('Ping All')
+        charge = int(json_data['pingall'])
+        for c in range(charge):
+            net.pingAll()
+
+        ans = {}
+        ans['trafico'] = 'Pacquetes'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
+    elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
+        print('TCP')
+        charge = int(json_data['TCP'])
+        traffic_tcp_total()
+        for c in range(charge):
+            CLI(net,script= "tcp.sh")
+
+        ans = {}
+        ans['trafico'] = 'TCP'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
+    elif not 'pingallG' in json_data  and not 'TCPG' in json_data and 'UDPG' in json_data:
+        print('UDP')
+        charge = int(json_data['UDP'])
+        traffic_udp_total()
+        for c in range(charge):
+            CLI(net,script= "udp.sh")
+
+        ans = {}
+        ans['trafico'] = 'UDP'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
+    elif 'pingallG' in json_data  and 'TCPG' in json_data  and not 'UDPG' in json_data:
+        print('Ping All - TCP')
+        charge = int(json_data['pingall'])
+        traffic_tcp_total()
+        for c in range(charge):
+            net.pingAll()
+            CLI(net,script= "tcp.sh")
+
+        ans = {}
+        ans['trafico'] = 'Paquetes - TCP'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
+    elif not 'pingallG' in json_data  and 'TCPG' in json_data and 'UDPG' in json_data:
+        print('TCP - UDP')
+        charge = int(json_data['TCP'])
+        traffic_tcp_total()
+        traffic_udp_total()
+        for c in range(charge):
+            
+            CLI(net,script= "tcp.sh")
+            CLI(net,script= "udp.sh")
+
+        ans = {}
+        ans['trafico'] = 'TCP - UDP'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
+    elif 'pingallG' in json_data and not 'TCPG' in json_data and 'UDPG' in json_data:
+        print('Ping All - UDP')
+        traffic_udp_total()
+        charge = int(json_data['pingall'])
+        for c in range(charge):
+            net.pingAll()
+            CLI(net,script= "udp.sh")
+
+        ans = {}
+        ans['trafico'] = 'Paquetes - UDP'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
+    elif 'pingallG' in json_data and 'TCPG' in json_data and 'UDPG' in json_data:
+        print('Ping All - TCP - UDP')
+        traffic_tcp_total()
+        traffic_udp_total()
+        charge = int(json_data['pingall'])
+        for c in range(charge):
+            net.pingAll()
+            CLI(net,script= "tcp.sh")
+            CLI(net,script= "udp.sh")
+
+        ans = {}
+        ans['trafico'] = 'Paquetes - TCP - UDP'
+        f = json.dumps(ans)
+        connection.sendall(f.encode())
+        ans = {}
+        return True
+
     else:
         print('Creando el Arreglo de la Red')
         # Contiene el diccionario de la clave Items
