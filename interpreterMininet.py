@@ -53,6 +53,7 @@ def traffic_tcp_total():
     file = open("tcp.sh", "w")         
     file.write(aux)
     file.close()
+    return "Algo"
 
 def traffic_udp_total():
     print(" aqui 2")
@@ -252,7 +253,8 @@ def interpreter(json_data, connection):
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP')
         charge = int(json_data['TCP'])
-        traffic_tcp_total()
+        bandera = traffic_tcp_total()
+        print ("algo de texto ",bandera)
         for c in range(charge):
             CLI(net,script= "tcp.sh")
 
