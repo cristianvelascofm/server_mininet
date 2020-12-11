@@ -58,7 +58,7 @@ while True:
                 if not aux:
                     break
 
-    except:
+    
         pass
     finally:
 
