@@ -40,7 +40,7 @@ switch_added = []
 controller_added = []
 
 # Creacion de la red en Mininet
-net = Mininet(build=None)
+net = None
 
 
 def traffic_udp_simple():
@@ -76,7 +76,7 @@ def traffic_udp_total():
 
 
 def run_mininet():
-
+    net = Mininet(build=None)
     print('Creacion de la Red ...')
 
 
@@ -125,7 +125,8 @@ def interpreter(json_data, connection):
         act = json_data['action']
         if act == "stop":
             print("Terminando Emulacion ...")
-            net.stop()
+            if net != None:
+                net.stop()
             ans = {}
             ans['emulacion'] = 'terminada'
             f = json.dumps(ans)
