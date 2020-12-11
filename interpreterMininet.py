@@ -64,7 +64,7 @@ def traffic_udp_total():
             if str(x) == str(y):
                 pass
             else:
-                aux = aux + "iperfudp "+str(x) + " " + str(y) + "\n"
+                aux = aux + "iperfudp "+ "1024 "+str(x) + " " + str(y) + "\n"
     file = open("udp.sh", "w")
     file.write(aux)
     file.close()
