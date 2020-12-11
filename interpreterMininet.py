@@ -69,23 +69,23 @@ def traffic_udp_total():
 
 def run_mininet():
 
-    print('Creación de la Red')
+    print('Creacion de la Red ...')
     host_added = []
     switch_added = []
     controller_added = []
 
     for b in host_container:
         host_added.append(net.addHost(b))
-    print('Hosts Creados')
+    print('Hosts Creados ...')
 
     for d in switch_container:
         switch_added.append(net.addSwitch(d))
-    print('Switchs Creados')
+    print('Switchs Creados ...')
     for f in controller_container:
         # controller_added.append(net.addController(
         #    name=f, controller=RemoteController, ip='10.556.150', port=6633))
         controller_added.append(net.addController(f))
-    print('Controladores Creados')
+    print('Controladores Creados ...')
     for n in link_array:
         l = n['cn'].split(",")
 
@@ -98,10 +98,10 @@ def run_mininet():
                         net.addLink(
                             m, j, intfName1=n['intfName1'], intfName2=n['intfName2'])
                             
-    print('Links Creados')
+    print('Links Creados ...')
     net.start()
-    print('Red Iniciada')
-    print("RED CREADA!!!")
+    print('RED INICIADA!! ...')
+    
 
 
 
@@ -109,18 +109,20 @@ def run_mininet():
 def wireshark_launcher():
     run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
 
-
+#Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
 
 
-def interpreter(json_data, connection):
 
+def interpreter(json_data, connection):
+    answer_to_client = None
     if 'action' in json_data:
 
         print(json_data['action'])
         act = json_data['action']
 
         if act == "stop":
+            print("Terminando Emulacion ...")
             net.stop()
             ans = {}
             ans['emulacion'] = 'terminada'
@@ -130,6 +132,7 @@ def interpreter(json_data, connection):
             return False
 
     elif 'wireshark' in json_data:
+        print("Iniciando Wireshark ...")
         w.start()
         ans = {}
         ans['wireshark'] = 'lanzado'
@@ -139,16 +142,17 @@ def interpreter(json_data, connection):
         return True
         
     elif ('pingall' in json_data) and (not 'TCP' in json_data) and (not 'UDP' in json_data):
-        print('Ping All')
+        print('Ping All ...')
+        dict_answer ={}
         charge = int(json_data['pingall'])
         for c in range(charge):
-            net.pingAll()
-
-        ans = {}
-        ans['trafico'] = 'Pacquetes'
-        f = json.dumps(ans)
+            answer_to_client = net.pingAll()
+            dict_answer[c] = answer_to_client
+        #ans = {}
+        #ans['trafico'] = 'Pacquetes'
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        #ans = {}
         return True
 
     elif not 'pingall' in json_data and 'TCP' in json_data and  not 'UDP' in json_data :
@@ -345,7 +349,7 @@ def interpreter(json_data, connection):
         return True
 
     else:
-        print('Creando el Arreglo de la Red')
+        print('Creando el Arreglo de la Red ...')
         # Contiene el diccionario de la clave Items
         array_data = json_data['items']
 
