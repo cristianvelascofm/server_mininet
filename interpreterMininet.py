@@ -118,9 +118,7 @@ def interpreter(json_data, connection):
     answer_to_client = None
     if 'action' in json_data:
 
-        print(json_data['action'])
         act = json_data['action']
-
         if act == "stop":
             print("Terminando Emulacion ...")
             net.stop()

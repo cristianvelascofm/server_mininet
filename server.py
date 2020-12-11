@@ -30,7 +30,7 @@ sock.listen(1)
 
 while True:
     # Wait for a connection
-    print('Esperando Conexcion Entrante')
+    print('Esperando Conexcion Entrante ...')
     connection, client_address = sock.accept()
     print('Conexion desde: ', client_address)
 
@@ -50,7 +50,6 @@ while True:
                 # ***-******-*****-*****-******-*****-*****-****-****-***-****
                 decode_data = data.decode()
                 dict_data = eval(decode_data)
-                print(type(dict_data))
                 json_data = json.loads(dict_data)
                 print('++++++++++++++++++++++++++')
                 print("MENSAJE ENTRANTE:", json_data)
