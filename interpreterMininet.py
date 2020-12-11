@@ -269,7 +269,8 @@ def interpreter(json_data, connection):
             answer_to_client = CLI(net,script= "tcp.sh")
             lista.append(answer_to_client.hosts)
         
-        print("LIsta:", lista)
+        for i in range(len(lista)):
+            print(lista[i])
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
         dict_answer = {}
