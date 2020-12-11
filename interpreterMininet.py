@@ -34,6 +34,11 @@ link_array = []
 link_dict = {}
 port_container = []
 
+
+host_added = []
+switch_added = []
+controller_added = []
+
 # Creacion de la red en Mininet
 net = Mininet(build=None)
 
@@ -73,9 +78,7 @@ def traffic_udp_total():
 def run_mininet():
 
     print('Creacion de la Red ...')
-    host_added = []
-    switch_added = []
-    controller_added = []
+
 
     for b in host_container:
         host_added.append(net.addHost(b))
@@ -159,7 +162,7 @@ def interpreter(json_data, connection):
         print('TCP ...')
         charge = int(json_data['TCP'])
         for c in range(charge):
-           answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+           answer_to_client = net.iperf(hosts = [host_added[0],host_added[2]],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
            dict_answer["TCP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
