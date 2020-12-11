@@ -40,8 +40,7 @@ switch_added = []
 controller_added = []
 
 # Creacion de la red en Mininet
-net = None
-
+net = Mininet(build=None)
 
 def traffic_udp_simple():
     file = open("udp.sh", "w")
@@ -76,7 +75,7 @@ def traffic_udp_total():
 
 
 def run_mininet():
-    net = Mininet(build=None)
+    
     print('Creacion de la Red ...')
 
 
