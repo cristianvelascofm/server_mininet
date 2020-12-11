@@ -160,7 +160,7 @@ def interpreter(json_data, connection):
         charge = int(json_data['TCP'])
         for c in range(charge):
            answer_to_client = net.iperf()
-           dict_answer["TCP" + c] = answer_to_client
+           dict_answer["TCP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -174,7 +174,7 @@ def interpreter(json_data, connection):
         traffic_udp_simple()
         for c in range(charge):
             answer_to_client = CLI(net, script="udp.sh")
-            dict_answer["UDP" + c] = answer_to_client
+            dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
