@@ -30,7 +30,7 @@ sock.listen(1)
 
 while True:
     # Wait for a connection
-    print('Esperando Conexcion Entrante ...')
+    print('Esperando Conexion Entrante ...')
     connection, client_address = sock.accept()
     print('Conexion desde: ', client_address)
 

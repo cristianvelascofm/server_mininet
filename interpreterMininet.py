@@ -176,7 +176,7 @@ def interpreter(json_data, connection):
         charge = int(json_data['UDP'])
         traffic_udp_simple()
         for c in range(charge):
-            answer_to_client = CLI(net, script="udp.sh")
+            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
             dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
@@ -207,7 +207,7 @@ def interpreter(json_data, connection):
         for c in range(charge):
             answer_to_client = net.iperf()
             dict_answer["TCP" + str(c)] = answer_to_client
-            answer_to_client = CLI(net, script="udp.sh")
+            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
             dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
@@ -223,7 +223,7 @@ def interpreter(json_data, connection):
         for c in range(charge):
             answer_to_client = net.pingAll()
             dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = CLI(net,script= "udp.sh")
+            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
             dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
@@ -241,7 +241,7 @@ def interpreter(json_data, connection):
             dict_answer["pingall" + str(c)] = answer_to_client
             answer_to_client = net.iperf()
             dict_answer["TCP" + str(c)] = answer_to_client
-            answer_to_client = CLI(net,script= "udp.sh")
+            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
             dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
@@ -339,7 +339,7 @@ def interpreter(json_data, connection):
                         else:
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
                             dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UCP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
                             dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
 
@@ -386,7 +386,7 @@ def interpreter(json_data, connection):
                         else:
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
                             dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UCP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
                             dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
