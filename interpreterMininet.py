@@ -262,15 +262,12 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP Global ...')
-        lista = []
         charge = int(json_data['TCPG'])
         traffic_tcp_total()
         for c in range(charge):
             answer_to_client = CLI(net,script= "tcp.sh")
-            lista.append(answer_to_client.hosts)
-        
-        for i in range(len(lista)):
-            print(lista[i])
+            dict_answer["TCP" + str(c)] = answer_to_client
+
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
         dict_answer = {}
@@ -282,60 +279,62 @@ def interpreter(json_data, connection):
         charge = int(json_data['UDPG'])
         traffic_udp_total()
         for c in range(charge):
-            CLI(net,script= "udp.sh")
+            answer_to_client = CLI(net,script= "udp.sh")
+            dict_answer["UDP" + str(c)] = answer_to_client
 
-        ans = {}
-        ans['trafico'] = 'UDP'
-        f = json.dumps(ans)
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        dict_answer = {}
+        answer_to_client = None
         return True
 
     elif 'pingallG' in json_data  and 'TCPG' in json_data  and not 'UDPG' in json_data:
-        print('Ping All - TCP')
+        print('Ping All - TCP Global ...')
         charge = int(json_data['pingallG'])
         traffic_tcp_total()
         for c in range(charge):
-            net.pingAll()
-            CLI(net,script= "tcp.sh")
+            answer_to_client = net.pingAll()
+            dict_answer["pingall" + str(c)] = answer_to_client
+            answer_to_client = CLI(net,script= "tcp.sh")
+            dict_answer["TCP" + str(c)] = answer_to_client
 
-        ans = {}
-        ans['trafico'] = 'Paquetes - TCP'
-        f = json.dumps(ans)
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        dict_answer = {}
+        answer_to_client = None
         return True
 
     elif not 'pingallG' in json_data  and 'TCPG' in json_data and 'UDPG' in json_data:
-        print('TCP - UDP')
+        print('TCP - UDP Global ...')
         charge = int(json_data['TCPG'])
         traffic_tcp_total()
         traffic_udp_total()
         for c in range(charge):
-            
-            CLI(net,script= "tcp.sh")
-            CLI(net,script= "udp.sh")
+            answer_to_client = CLI(net,script= "tcp.sh")
+            dict_answer["TCP" + str(c)] = answer_to_client
+            answer_to_client = CLI(net,script= "udp.sh")
+            dict_answer["UDP" + str(c)] = answer_to_client
 
-        ans = {}
-        ans['trafico'] = 'TCP - UDP'
-        f = json.dumps(ans)
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        dict_answer = {}
+        answer_to_client = None
         return True
 
     elif 'pingallG' in json_data and not 'TCPG' in json_data and 'UDPG' in json_data:
-        print('Ping All - UDP')
+        print('Ping All - UDP Global ...')
         traffic_udp_total()
         charge = int(json_data['pingallG'])
         for c in range(charge):
-            net.pingAll()
-            CLI(net,script= "udp.sh")
+            answer_to_client = net.pingAll()
+            dict_answer["pingall" + str(c)] = answer_to_client
+            answer_to_client = CLI(net,script= "udp.sh")
+            dict_answer["UDP" + str(c)] = answer_to_client
 
-        ans = {}
-        ans['trafico'] = 'Paquetes - UDP'
-        f = json.dumps(ans)
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        dict_answer = {}
+        answer_to_client = None
         return True
 
     elif 'pingallG' in json_data and 'TCPG' in json_data and 'UDPG' in json_data:
@@ -344,15 +343,17 @@ def interpreter(json_data, connection):
         traffic_udp_total()
         charge = int(json_data['pingallG'])
         for c in range(charge):
-            net.pingAll()
-            CLI(net,script= "tcp.sh")
-            CLI(net,script= "udp.sh")
+            answer_to_client = net.pingAll()
+            dict_answer["pingall" + str(c)] = answer_to_client
+            answer_to_client = CLI(net,script= "tcp.sh")
+            dict_answer["TCP" + str(c)] = answer_to_client
+            answer_to_client =CLI(net,script= "udp.sh")
+            dict_answer["UDP" + str(c)] = answer_to_client
 
-        ans = {}
-        ans['trafico'] = 'Paquetes - TCP - UDP'
-        f = json.dumps(ans)
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        dict_answer = {}
+        answer_to_client = None
         return True
 
     else:
