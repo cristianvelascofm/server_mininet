@@ -39,7 +39,7 @@ while True:
         # Receive the data in small chunks and retransmit it
         while True:
             print("Esperando Order ...")
-            data = connection.recv(8192)
+            data = connection.recv(65000)
 
             if not data:
                 print('Sin datos ...')

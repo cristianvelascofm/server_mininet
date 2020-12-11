@@ -255,7 +255,7 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
+            dict_answer["pingall " + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -268,14 +268,13 @@ def interpreter(json_data, connection):
         charge = int(json_data['TCPG'])
         traffic_tcp_total()
         for c in range(charge):
-            
             for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
                         pass
                     else:
                         answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )            
-                        dict_answer["TCP " + str(x)+" to "+str(y)] = answer_to_client
+                        dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
             
             #answer_to_client = CLI(net,script= "tcp.sh")
             #dict_answer["TCP" + str(c)] = answer_to_client
@@ -297,7 +296,7 @@ def interpreter(json_data, connection):
                         pass
                     else:
                         answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )            
-                        dict_answer["UDP " + str(x)+" to "+str(y)] = answer_to_client
+                        dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
         
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -311,9 +310,14 @@ def interpreter(json_data, connection):
         traffic_tcp_total()
         for c in range(charge):
             answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = CLI(net,script= "tcp.sh")
-            dict_answer["TCP" + str(c)] = answer_to_client
+            dict_answer["pingall " + str(c)] = answer_to_client
+            for x in host_added:
+                for y in host_added:
+                    if str(x) == str(y):
+                        pass
+                    else:
+                        answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )            
+                        dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -327,10 +331,17 @@ def interpreter(json_data, connection):
         traffic_tcp_total()
         traffic_udp_total()
         for c in range(charge):
-            answer_to_client = CLI(net,script= "tcp.sh")
-            dict_answer["TCP" + str(c)] = answer_to_client
-            answer_to_client = CLI(net,script= "udp.sh")
-            dict_answer["UDP" + str(c)] = answer_to_client
+            for c in range(charge):
+                for x in host_added:
+                    for y in host_added:
+                        if str(x) == str(y):
+                            pass
+                        else:
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                            dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UCP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
+                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -344,9 +355,14 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = CLI(net,script= "udp.sh")
-            dict_answer["UDP" + str(c)] = answer_to_client
+            dict_answer["pingall " + str(c)] = answer_to_client
+            for x in host_added:
+                for y in host_added:
+                    if str(x) == str(y):
+                        pass
+                    else:
+                        answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )            
+                        dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -361,11 +377,17 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = CLI(net,script= "tcp.sh")
-            dict_answer["TCP" + str(c)] = answer_to_client
-            answer_to_client =CLI(net,script= "udp.sh")
-            dict_answer["UDP" + str(c)] = answer_to_client
+            dict_answer["pingall " + str(c)] = answer_to_client
+            for c in range(charge):
+                for x in host_added:
+                    for y in host_added:
+                        if str(x) == str(y):
+                            pass
+                        else:
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                            dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UCP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
+                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
