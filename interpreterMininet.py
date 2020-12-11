@@ -156,16 +156,18 @@ def interpreter(json_data, connection):
         return True
 
     elif not 'pingall' in json_data and 'TCP' in json_data and  not 'UDP' in json_data :
-        print('TCP')
+        print('TCP ...')
+        dict_answer ={}
         charge = int(json_data['TCP'])
         for c in range(charge):
-            net.iperf()
+           answer_to_client = net.iperf()
+           dict_answer[c] = answer_to_client
 
-        ans = {}
-        ans['trafico'] = 'TCP'
-        f = json.dumps(ans)
+        #ans = {}
+        #ans['trafico'] = 'TCP'
+        f = json.dumps(dict_answer)
         connection.sendall(f.encode())
-        ans = {}
+        #ans = {}
         return True
 
     elif not 'pingall' in json_data  and not 'TCP' in json_data and 'UDP' in json_data:
