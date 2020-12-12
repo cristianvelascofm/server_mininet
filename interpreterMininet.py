@@ -40,7 +40,7 @@ switch_added = []
 controller_added = []
 
 # Creacion de la red en Mininet
-net = Mininet(build=None)
+net = None
 
 def traffic_udp_simple():
     file = open("udp.sh", "w")
@@ -75,7 +75,7 @@ def traffic_udp_total():
 
 
 def run_mininet():
-    
+    net = Mininet(build=None)
     print('Creacion de la Red ...')
 
 
@@ -148,8 +148,9 @@ def interpreter(json_data, connection):
 
         charge = int(json_data['pingall'])
         for c in range(charge):
-            answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.pingAll()
+                dict_answer["pingall" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -162,8 +163,9 @@ def interpreter(json_data, connection):
         print('TCP ...')
         charge = int(json_data['TCP'])
         for c in range(charge):
-           answer_to_client = net.iperf()
-           dict_answer["TCP" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.iperf()
+                dict_answer["TCP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -174,10 +176,10 @@ def interpreter(json_data, connection):
     elif not 'pingall' in json_data and not 'TCP' in json_data and 'UDP' in json_data:
         print('UDP ...')
         charge = int(json_data['UDP'])
-        traffic_udp_simple()
         for c in range(charge):
-            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
-            dict_answer["UDP" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -189,10 +191,11 @@ def interpreter(json_data, connection):
         print('Ping All - TCP ...')
         charge = int(json_data['pingall'])
         for c in range(charge):
-            answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = net.iperf()
-            dict_answer["TCP" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.pingAll()
+                dict_answer["pingall" + str(c)] = answer_to_client
+                answer_to_client = net.iperf()
+                dict_answer["TCP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -203,12 +206,13 @@ def interpreter(json_data, connection):
     elif not 'pingall' in json_data and 'TCP' in json_data and 'UDP' in json_data:
         print('TCP - UDP ...')
         charge = int(json_data['TCP'])
-        traffic_udp_simple()
+        
         for c in range(charge):
-            answer_to_client = net.iperf()
-            dict_answer["TCP" + str(c)] = answer_to_client
-            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
-            dict_answer["UDP" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.iperf()
+                dict_answer["TCP" + str(c)] = answer_to_client
+                answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -218,13 +222,14 @@ def interpreter(json_data, connection):
 
     elif 'pingall' in json_data and not 'TCP' in json_data and 'UDP' in json_data:
         print('Ping All - UDP ...')
-        traffic_udp_simple()
+        
         charge = int(json_data['pingall'])
         for c in range(charge):
-            answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
-            dict_answer["UDP" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.pingAll()
+                dict_answer["pingall" + str(c)] = answer_to_client
+                answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -234,15 +239,16 @@ def interpreter(json_data, connection):
 
     elif 'pingall' in json_data and 'TCP' in json_data and 'UDP' in json_data:
         print('Ping All - TCP - UDP ...')
-        traffic_udp_simple()
+        
         charge = int(json_data['pingall'])
         for c in range(charge):
-            answer_to_client = net.pingAll()
-            dict_answer["pingall" + str(c)] = answer_to_client
-            answer_to_client = net.iperf()
-            dict_answer["TCP" + str(c)] = answer_to_client
-            answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
-            dict_answer["UDP" + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.pingAll()
+                dict_answer["pingall" + str(c)] = answer_to_client
+                answer_to_client = net.iperf()
+                dict_answer["TCP" + str(c)] = answer_to_client
+                answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                dict_answer["UDP" + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -254,8 +260,9 @@ def interpreter(json_data, connection):
         print('Ping All Global ...')
         charge = int(json_data['pingallG'])
         for c in range(charge):
-            answer_to_client = net.pingAll()
-            dict_answer["pingall " + str(c)] = answer_to_client
+            if net != None:
+                answer_to_client = net.pingAll()
+                dict_answer["pingall " + str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -266,15 +273,16 @@ def interpreter(json_data, connection):
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP Global ...')
         charge = int(json_data['TCPG'])
-        traffic_tcp_total()
+        
         for c in range(charge):
             for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
                         pass
                     else:
-                        answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )            
-                        dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
+                        if net != None:
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )            
+                            dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
             
             #answer_to_client = CLI(net,script= "tcp.sh")
             #dict_answer["TCP" + str(c)] = answer_to_client
@@ -288,15 +296,16 @@ def interpreter(json_data, connection):
     elif not 'pingallG' in json_data  and not 'TCPG' in json_data and 'UDPG' in json_data:
         print('UDP Global ...')
         charge = int(json_data['UDPG'])
-        traffic_udp_total()
+        
         for c in range(charge):
             for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
                         pass
                     else:
-                        answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )            
-                        dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                        if net != None:
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )            
+                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
         
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -307,7 +316,7 @@ def interpreter(json_data, connection):
     elif 'pingallG' in json_data  and 'TCPG' in json_data  and not 'UDPG' in json_data:
         print('Ping All - TCP Global ...')
         charge = int(json_data['pingallG'])
-        traffic_tcp_total()
+        
         for c in range(charge):
             answer_to_client = net.pingAll()
             dict_answer["pingall " + str(c)] = answer_to_client
@@ -316,8 +325,9 @@ def interpreter(json_data, connection):
                     if str(x) == str(y):
                         pass
                     else:
-                        answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )            
-                        dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
+                        if net != None:
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )            
+                            dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -328,8 +338,6 @@ def interpreter(json_data, connection):
     elif not 'pingallG' in json_data  and 'TCPG' in json_data and 'UDPG' in json_data:
         print('TCP - UDP Global ...')
         charge = int(json_data['TCPG'])
-        traffic_tcp_total()
-        traffic_udp_total()
         for c in range(charge):
             for c in range(charge):
                 for x in host_added:
@@ -337,10 +345,11 @@ def interpreter(json_data, connection):
                         if str(x) == str(y):
                             pass
                         else:
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
-                            dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
-                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                            if net != None:
+                                answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
+                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
 
         f = json.dumps(dict_answer)
@@ -351,7 +360,7 @@ def interpreter(json_data, connection):
 
     elif 'pingallG' in json_data and not 'TCPG' in json_data and 'UDPG' in json_data:
         print('Ping All - UDP Global ...')
-        traffic_udp_total()
+        
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll()
@@ -361,8 +370,9 @@ def interpreter(json_data, connection):
                     if str(x) == str(y):
                         pass
                     else:
-                        answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )            
-                        dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                        if net != None:
+                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )            
+                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -372,8 +382,6 @@ def interpreter(json_data, connection):
 
     elif 'pingallG' in json_data and 'TCPG' in json_data and 'UDPG' in json_data:
         print('Ping All - TCP - UDP')
-        traffic_tcp_total()
-        traffic_udp_total()
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll()
@@ -384,10 +392,11 @@ def interpreter(json_data, connection):
                         if str(x) == str(y):
                             pass
                         else:
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
-                            dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
-                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                            if net != None:
+                                answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = '10M',fmt = None, seconds = 5, port = 5001 )
+                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = '1024M',fmt = None, seconds = 5, port = 5001 )
+                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
