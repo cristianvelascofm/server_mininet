@@ -124,14 +124,14 @@ def interpreter(json_data, connection):
         act = json_data['action']
         if act == "stop":
             print("Terminando Emulacion ...")
-            if net != None:
-                net.stop()
+            net.stop()
             ans = {}
             ans['emulacion'] = 'terminada'
             f = json.dumps(ans)
             connection.sendall(f.encode())
             ans = {}
-            return False
+            
+        return False
 
     elif 'wireshark' in json_data:
         print("Iniciando Wireshark ...")
