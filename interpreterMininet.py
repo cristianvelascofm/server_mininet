@@ -40,7 +40,7 @@ switch_added = []
 controller_added = []
 
 # Creacion de la red en Mininet
-net = Mininet(build=None)
+net = Mininet(build=False)
 
 def traffic_udp_simple():
     file = open("udp.sh", "w")
@@ -124,13 +124,13 @@ def interpreter(json_data, connection):
         act = json_data['action']
         if act == "stop":
             print("Terminando Emulacion ...")
-            net.stop()
+            CLI(net,script= "stop.sh")
             ans = {}
             ans['emulacion'] = 'terminada'
             f = json.dumps(ans)
             connection.sendall(f.encode())
             ans = {}
-            
+
         return False
 
     elif 'wireshark' in json_data:
