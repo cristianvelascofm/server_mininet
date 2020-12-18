@@ -117,8 +117,10 @@ w = threading.Thread(target=wireshark_launcher,)
 
 
 def interpreter(json_data, connection):
-    answer_to_client = None
-    dict_answer = {}
+    answer_to_client = None 
+    charge_array = {}
+    traffic_array = {}
+    dict_answer = {} #diccionario que se enviará como respuesta al Cliente
     if 'action' in json_data:
 
         act = json_data['action']
@@ -150,7 +152,9 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
+
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -167,7 +171,9 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
+
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -183,7 +189,8 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -199,9 +206,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -217,9 +226,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -235,9 +246,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -253,11 +266,14 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.iperf()
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -273,7 +289,8 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -286,13 +303,15 @@ def interpreter(json_data, connection):
         print('Ping Full - UDP ...')
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfull'])
+        charge = int(json_data['pingfull'])
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
+                charge_array[str(c)] = answer_to_client
+                dict_answer["pingfull"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -305,13 +324,15 @@ def interpreter(json_data, connection):
         print('Ping Full - TCP ...')
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])        
-        charge = int(json_data['pinfull'])
+        charge = int(json_data['pingfull'])
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -327,9 +348,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] =charge_array
                 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -346,11 +369,14 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -366,12 +392,15 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingall'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.pingAll(timeout= time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                answer_to_client = net.pingAll(timeout=time_e)
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -384,17 +413,21 @@ def interpreter(json_data, connection):
         print('Ping All  - Ping Full - TCP - UDP ...')
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfull'])
+        charge = int(json_data['pingfull'])
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] =charge_array
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pinfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["TCP"] =charge_array
                 answer_to_client = net.iperf(hosts = None,l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["UDP"] =charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -431,8 +464,12 @@ def interpreter(json_data, connection):
                         pass
                     else:
                         if net != None:
-                            answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )            
-                            dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
+                            answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
+                            traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                            charge_array[c]= traffic_array
+                            dict_answer['TCP'] = charge_array
+                            #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
+
             
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -453,7 +490,9 @@ def interpreter(json_data, connection):
                     else:
                         if net != None:
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )            
-                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                            traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                            charge_array[c]= traffic_array
+                            dict_answer['UDP'] = charge_array
         
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -468,7 +507,8 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingallG'])        
         for c in range(charge):
             answer_to_client = net.pingAll(timeout=time_e)
-            dict_answer["pingall " + str(c)] = answer_to_client
+            charge_array[c] = answer_to_client
+            dict_answer['pingall'] = charge_array
             for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
@@ -476,7 +516,9 @@ def interpreter(json_data, connection):
                     else:
                         if net != None:
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )            
-                            dict_answer["TCP " + str(x)+" to "+str(y) + " " + str(c) ] = answer_to_client
+                            traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                            charge_array[c]= traffic_array
+                            dict_answer['TCP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -498,9 +540,13 @@ def interpreter(json_data, connection):
                         else:
                             if net != None:
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['TCP'] = charge_array
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['UDP'] = charge_array
 
 
         f = json.dumps(dict_answer)
@@ -516,7 +562,8 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll(timeout=time_e)
-            dict_answer["pingall " + str(c)] = answer_to_client
+            charge_array[c] = answer_to_client
+            dict_answer["pingall"] = charge_array
             for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
@@ -524,7 +571,9 @@ def interpreter(json_data, connection):
                     else:
                         if net != None:
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )            
-                            dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                            traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                            charge_array[c]= traffic_array
+                            dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -539,7 +588,8 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingallG'])
         for c in range(charge):
             answer_to_client = net.pingAll(timeout=time_e)
-            dict_answer["pingall " + str(c)] = answer_to_client
+            charge_array[c]= answer_to_client
+            dict_answer["pingall"] = charge_array
             for c in range(charge):
                 for x in host_added:
                     for y in host_added:
@@ -548,9 +598,13 @@ def interpreter(json_data, connection):
                         else:
                             if net != None:
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['TCP'] = charge_array
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -566,7 +620,8 @@ def interpreter(json_data, connection):
             if net != None:
                 
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -579,11 +634,12 @@ def interpreter(json_data, connection):
         print('Ping Full - UDP Global...')
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfullG'])
+        charge = int(json_data['pingfullG'])
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client    
+                charge_array[c]= answer_to_client
+                dict_answer["pingfull"] = charge_array
                 for x in host_added:
                     for y in host_added:
                         for y in host_added:
@@ -591,7 +647,9 @@ def interpreter(json_data, connection):
                                 pass
                             else:             
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw =udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -604,11 +662,12 @@ def interpreter(json_data, connection):
         print('Ping Full - TCP Global...')
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfullG'])
+        charge = int(json_data['pingfullG'])
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client    
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
                 for x in host_added:
                     for y in host_added:             
                         for y in host_added:
@@ -616,7 +675,9 @@ def interpreter(json_data, connection):
                                 pass
                             else:
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds =time_e, port = 5001 )
-                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['TCP'] = charge_array
 
 
         f = json.dumps(dict_answer)
@@ -633,9 +694,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] = charge_array
                 answer_to_client = net.pingFull(time_e)
-                dict_answer["pingfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
                 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -652,9 +715,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] = charge_array
                 answer_to_client = net.pingFull(timeout=time_e)
-                dict_answer["pingfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
                 for x in host_added:
                     for y in host_added:
                         for y in host_added:
@@ -662,8 +727,9 @@ def interpreter(json_data, connection):
                                 pass
                             else:  
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
-
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['TCP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -680,9 +746,11 @@ def interpreter(json_data, connection):
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] = charge_array
                 answer_to_client = net.pingFull()
-                dict_answer["pingfull" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
                 for x in host_added:
                     for y in host_added:             
                         for y in host_added:
@@ -690,8 +758,9 @@ def interpreter(json_data, connection):
                                 pass
                             else:
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
-
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -704,13 +773,15 @@ def interpreter(json_data, connection):
         print('Ping All  - Ping Full - TCP - UDP Global ...')
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfullG'])
+        charge = int(json_data['pingfullG'])
         for c in range(charge):
             if net != None:
                 answer_to_client = net.pingAll(timeout=time_e)
-                dict_answer["pingall" + str(c)] = answer_to_client
+                charge_array[c] = answer_to_client
+                dict_answer["pingall"] = charge_array
                 answer_to_client = net.pingFull()
-                dict_answer["pinfull" + str(c)] = answer_to_client
+                charge_array[c]  = answer_to_client
+                dict_answer["pinfull"] = charge_array
                 for x in host_added:
                     for y in host_added:             
                         for y in host_added:
@@ -718,9 +789,13 @@ def interpreter(json_data, connection):
                                 pass
                             else:
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["TCP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['TCP'] = charge_array
                                 answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                                dict_answer["UDP " + str(x)+" to "+ str(y)+ " " +str(c)] = answer_to_client
+                                traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                                charge_array[c]= traffic_array
+                                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -739,8 +814,10 @@ def interpreter(json_data, connection):
         time_e = int(json_data['time'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['TCP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -757,8 +834,10 @@ def interpreter(json_data, connection):
         time_e = int(json_data['time'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -776,10 +855,14 @@ def interpreter(json_data, connection):
         
         for c in range(charge):
             if net != None:
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['TCP'] = charge_array
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -796,8 +879,9 @@ def interpreter(json_data, connection):
         time_e = int(json_data['time'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.pingFull(hosts = [h_initial,h_final],timeout = time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
+                answer_to_client = net.pingFull(hosts = [host_added[h_initial-1],host_added[h_final-1]],timeout = time_e)
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -811,13 +895,16 @@ def interpreter(json_data, connection):
         h_initial = int(json_data['hInitial'])
         h_final = int(json_data['hFinal'])       
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfullP'])
+        charge = int(json_data['pingfullP'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.pingFull(hosts = [h_initial,h_final],timeout = time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                answer_to_client = net.pingFull(hosts = [host_added[h_initial-1],host_added[h_final-1]],timeout = time_e)
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -831,13 +918,16 @@ def interpreter(json_data, connection):
         h_initial = int(json_data['hInitial'])
         h_final = int(json_data['hFinal'])       
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfullP'])
+        charge = int(json_data['pingfullP'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.pingFull(hosts = [h_initial,h_final],timeout = time_e)
-                dict_answer["pingfull " + str(c)] = answer_to_client
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
+                answer_to_client = net.pingFull(hosts = [host_added[h_initial-1],host_added[h_final-1]],timeout = time_e)
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['TCP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
@@ -850,15 +940,20 @@ def interpreter(json_data, connection):
         h_initial = int(json_data['hInitial'])
         h_final = int(json_data['hFinal'])       
         time_e = int(json_data['time'])
-        charge = int(json_data['pinfullP'])
+        charge = int(json_data['pingfullP'])
         for c in range(charge):
             if net != None:
-                answer_to_client = net.pingFull(hosts = [h_initial,h_final],timeout = time_e)
-                dict_answer["pinfull" + str(c)] = answer_to_client
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["TCP " + str(c)] = answer_to_client
-                answer_to_client = net.iperf(hosts = [h_initial,h_final],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
-                dict_answer["UDP " + str(c)] = answer_to_client
+                answer_to_client = net.pingFull(hosts = [host_added[h_initial-1],host_added[h_final-1]],timeout = time_e)
+                charge_array[c] = answer_to_client
+                dict_answer["pingfull"] = charge_array
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['TCP'] = charge_array
+                answer_to_client = net.iperf(hosts = [host_added[h_initial-1],host_added[h_final-1]],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )
+                traffic_array[str('h'+h_initial)+"-"+str('h'+h_final)]= answer_to_client
+                charge_array[c]= traffic_array
+                dict_answer['UDP'] = charge_array
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
