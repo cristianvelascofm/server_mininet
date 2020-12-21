@@ -492,7 +492,7 @@ def interpreter(json_data, connection):
 
                             run_recvITG(hots_receiver)
                             run_sendITG(str(x),host_sender)
-                            reso = run_decoITG(str(y))
+                            reso = run_decoITG(str(x))
                             print(reso)
                             
                             #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
