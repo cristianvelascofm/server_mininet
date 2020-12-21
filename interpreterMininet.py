@@ -127,6 +127,9 @@ def run_sendITG(name_host,sender):
     command = net.getNodeByName(name_host).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log')
     #p = os.system('echo %s|sudo -S %s' % ('123', command))
 
+def run_decoITG(listen):
+    command = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGDec receptor.log')
+
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
 
