@@ -481,25 +481,25 @@ def interpreter(json_data, connection):
         time_e = int(json_data['time'])
         
         for c in range(charge):
-            for x in host_added:
+            '''for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
                         pass
-                    else:
-                        if net != None:
-                            host_sender = net.getNodeByName(str(x)).cmd('ifconfig')
-                            hots_receiver = str(y)
+                    else:'''
+            if net != None:
+                host_sender = net.getNodeByName(host_added[0]).cmd('ifconfig')
+                hots_receiver = str(host_added[1])
 
-                            run_recvITG(hots_receiver)
-                            run_sendITG(str(x),host_sender)
-                            reso = run_decoITG(str(x))
-                            print(reso)
-                            
-                            #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
-                            #traffic_array[str(x)+"-"+str(y)]= answer_to_client
-                            #charge_array[c]= traffic_array
-                            #dict_answer['TCP'] = charge_array
-                            #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
+                run_recvITG(hots_receiver)
+                run_sendITG(str(host_added[0]),host_sender)
+                reso = run_decoITG(str(host_added[0]))
+                print(reso)
+                
+                #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
+                #traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                #charge_array[c]= traffic_array
+                #dict_answer['TCP'] = charge_array
+                #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
 
             
         f = json.dumps(dict_answer)
