@@ -120,12 +120,12 @@ def wireshark_launcher():
 def run_recvITG(listen):
     #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin/.')
     command_itg_receiver = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGRecv')
-    p = os.system('echo %s|sudo -S %s' % ('123', command_itg_receiver))
+    #p = os.system('echo %s|sudo -S %s' % ('123', command_itg_receiver))
 
-def run_sendITG(sender):
+def run_sendITG(name_host,sender):
     #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin')
-    command = '/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log'
-    p = os.system('echo %s|sudo -S %s' % ('123', command))
+    command = net.getNodeByName(name_host).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log')
+    #p = os.system('echo %s|sudo -S %s' % ('123', command))
 
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
@@ -486,7 +486,7 @@ def interpreter(json_data, connection):
                             hots_receiver = str(y)
 
                             run_recvITG(hots_receiver)
-                            run_sendITG(host_sender)
+                            run_sendITG(str(x),host_sender)
 
                             
                             answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
