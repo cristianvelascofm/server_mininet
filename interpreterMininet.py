@@ -39,6 +39,11 @@ host_added = []
 switch_added = []
 controller_added = []
 
+#Variables para la generacion de trafico ITG
+
+hots_receiver = None
+host_sender = None
+
 # Creacion de la red en Mininet
 net = Mininet(build=False)
 
@@ -112,9 +117,22 @@ def wireshark_launcher():
     run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
 
 
+def run_recvITG(listen):
+    #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin/.')
+    command_itg_receiver = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGRecv')
+    p = os.system('echo %s|sudo -S %s' % ('123', command_itg_receiver))
+
+def run_sendITG(sender):
+    #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin')
+    command = '/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log'
+    p = os.system('echo %s|sudo -S %s' % ('123', command))
+
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
 
+# Creacion de hilos para el generador de tráfico ITG
+recvITG = threading.Thread(target=run_recvITG,args=(hots_receiver))
+sendITG = threading.Thread(target=run_sendITG,args=(host_sender))
 
 def interpreter(json_data, connection):
     answer_to_client = None 
@@ -464,6 +482,13 @@ def interpreter(json_data, connection):
                         pass
                     else:
                         if net != None:
+                            host_sender = net.getNodeByName(str(x)).cmd('ifconfig')
+                            hots_receiver = str(y)
+
+                            recvITG.start()
+                            sendITG.start()                           
+
+                            
                             answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
                             traffic_array[str(x)+"-"+str(y)]= answer_to_client
                             charge_array[c]= traffic_array
@@ -517,6 +542,7 @@ def interpreter(json_data, connection):
                         if net != None:
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'TCP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )            
                             traffic_array[str(x)+"-"+str(y)]= answer_to_client
+
                             charge_array[c]= traffic_array
                             dict_answer['TCP'] = charge_array
 
