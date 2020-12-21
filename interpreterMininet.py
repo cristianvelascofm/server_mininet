@@ -485,8 +485,8 @@ def interpreter(json_data, connection):
                             host_sender = net.getNodeByName(str(x)).cmd('ifconfig')
                             hots_receiver = str(y)
 
-                            recvITG.start()
-                            sendITG.start()                           
+                            run_recvITG(hots_receiver)
+                            run_sendITG(host_sender)
 
                             
                             answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
