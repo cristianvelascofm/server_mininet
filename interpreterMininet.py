@@ -489,10 +489,10 @@ def interpreter(json_data, connection):
                             run_sendITG(str(x),host_sender)
 
                             
-                            answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
-                            traffic_array[str(x)+"-"+str(y)]= answer_to_client
-                            charge_array[c]= traffic_array
-                            dict_answer['TCP'] = charge_array
+                            #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
+                            #traffic_array[str(x)+"-"+str(y)]= answer_to_client
+                            #charge_array[c]= traffic_array
+                            #dict_answer['TCP'] = charge_array
                             #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
 
             
