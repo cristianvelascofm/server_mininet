@@ -119,17 +119,17 @@ def wireshark_launcher():
 
 def run_recvITG(listen):
     #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin/.')
-    command_itg_receiver = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGRecv')
+    command_itg_receiver = net.getNodeByName(listen).noecho('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGRecv')
     #p = os.system('echo %s|sudo -S %s' % ('123', command_itg_receiver))
 
 def run_sendITG(name_host,sender):
     #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin')
-    command = net.getNodeByName(name_host).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log')
+    command = net.getNodeByName(name_host).noecho('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log')
     #p = os.system('echo %s|sudo -S %s' % ('123', command))
 
 def run_decoITG(listen):
     comman= None
-    comman = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGDec receptor.log')
+    comman = net.getNodeByName(listen).noecho('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGDec receptor.log')
     return comman
 
 # Creacion del hilo para lanzar Wireshark
