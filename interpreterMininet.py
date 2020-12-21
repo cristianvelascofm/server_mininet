@@ -487,7 +487,7 @@ def interpreter(json_data, connection):
                         pass
                     else:'''
             if net != None:
-                host_sender = net.getNodeByName(host_added[0]).cmd('ifconfig')
+                host_sender = net.getNodeByName(str(host_added[0])).cmd('ifconfig')
                 hots_receiver = str(host_added[1])
 
                 run_recvITG(hots_receiver)
