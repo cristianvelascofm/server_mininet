@@ -128,7 +128,9 @@ def run_sendITG(name_host,sender):
     #p = os.system('echo %s|sudo -S %s' % ('123', command))
 
 def run_decoITG(listen):
-    command = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGDec receptor.log')
+    comman= None
+    comman = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/.ITGDec receptor.log')
+    return comman
 
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
@@ -490,7 +492,8 @@ def interpreter(json_data, connection):
 
                             run_recvITG(hots_receiver)
                             run_sendITG(str(x),host_sender)
-
+                            reso = run_decoITG(str(y))
+                            print(reso)
                             
                             #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
                             #traffic_array[str(x)+"-"+str(y)]= answer_to_client
