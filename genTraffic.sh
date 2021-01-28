@@ -1,0 +1,1 @@
+noecho h1 ifconfig

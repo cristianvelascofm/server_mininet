@@ -649,6 +649,7 @@ def interpreter(json_data, connection):
         print('Ping Full Global...')
         time_e = int(json_data['time'])
         charge = int(json_data['pingfullG'])
+        myScript = "genTraffic.sh"
         for c in range(charge):
             if net != None:
                 for x in host_added:
@@ -656,11 +657,7 @@ def interpreter(json_data, connection):
                         if str(x) == str(y):
                             pass
                         else: 
-                            x.cmd('cd D-ITG-2.8.1-r1023/bin')
-                            x.cmd('./ITGRecv')
-                            y.cmd('cd D-ITG-2.8.1-r1023/bin')
-                            y.cmd('./ITGSend –T UDP  –a 10.0.0.1 –c 100 –C 10 –t 15000 -l sender.log –x receiver.log')
-                
+                            CLI(net, script= myScript)
                 '''answer_to_client = net.pingFull(timeout=time_e)
                 charge_array[c] = answer_to_client
                 dict_answer["pingfull"] = charge_array'''
