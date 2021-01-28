@@ -130,15 +130,15 @@ def run_sendITG(name_host,sender):
 def run_decoITG(listen):
     comman= None
     net.getNodeByName(listen).cmd('cd /home/mininet/D-ITG-2.8.1-r1023/bin/')
-    comman = net.getNodeByName(listen).cmd('ls')
+    comman = net.getNodeByName(listen).cmd('ls-')
     return comman
 
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
 
 # Creacion de hilos para el generador de tráfico ITG
-recvITG = threading.Thread(target=run_recvITG,args=(hots_receiver))
-sendITG = threading.Thread(target=run_sendITG,args=(host_sender))
+recvITG = threading.Thread(target=run_recvITG,args=(hots_receiver,))
+sendITG = threading.Thread(target=run_sendITG,args=(host_sender,))
 
 def interpreter(json_data, connection):
     answer_to_client = None 
@@ -651,10 +651,19 @@ def interpreter(json_data, connection):
         charge = int(json_data['pingfullG'])
         for c in range(charge):
             if net != None:
+                for x in host_added:
+                    for y in host_added:
+                        if str(x) == str(y):
+                            pass
+                        else: 
+                            x.cmd('cd D-ITG-2.8.1-r1023/bin')
+                            x.cmd('./ITGRecv')
+                            y.cmd('cd D-ITG-2.8.1-r1023/bin')
+                            y.cmd('./ITGSend –T UDP  –a 10.0.0.1 –c 100 –C 10 –t 15000 -l sender.log –x receiver.log')
                 
-                answer_to_client = net.pingFull(timeout=time_e)
+                '''answer_to_client = net.pingFull(timeout=time_e)
                 charge_array[c] = answer_to_client
-                dict_answer["pingfull"] = charge_array
+                dict_answer["pingfull"] = charge_array'''
 
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
