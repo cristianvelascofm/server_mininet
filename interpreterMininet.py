@@ -663,7 +663,7 @@ def interpreter(json_data, connection):
                         if str(x) == str(y):
                             pass
                         else:
-                            CLI(net, script='gentTraffic.sh')
+                            CLI(net, script='genTraffic.sh')
                 '''answer_to_client = net.pingFull(timeout=time_e)
                 charge_array[c] = answer_to_client
                 dict_answer["pingfull"] = charge_array'''
