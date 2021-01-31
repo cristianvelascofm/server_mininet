@@ -133,6 +133,12 @@ def run_decoITG(listen):
     comman = net.getNodeByName(listen).cmd('ls-')
     return comman
 
+def run_server_iperf(host):
+    command= None
+    net.getNodeByName(host).cmd('iperf3 -s')
+
+def run_client_iperf(host):
+    pass
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher,)
 
@@ -656,8 +662,14 @@ def interpreter(json_data, connection):
                     for y in host_added:
                         if str(x) == str(y):
                             pass
-                        else: 
-                            CLI(net, script= myScript)
+                        else:
+                            x.cmd('iperf3 -s -D')
+                            ip_server= x.IP
+                            
+                            y.cmd('iperf3 -c '+str(ip_server)+' -u')
+
+
+                            #CLI(net, script= myScript)
                 '''answer_to_client = net.pingFull(timeout=time_e)
                 charge_array[c] = answer_to_client
                 dict_answer["pingfull"] = charge_array'''
