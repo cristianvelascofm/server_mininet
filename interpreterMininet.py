@@ -663,10 +663,10 @@ def interpreter(json_data, connection):
                         if str(x) == str(y):
                             pass
                         else:
-                            x.cmd('iperf3 -s -D')
+                            x.cmd('iperf3 -s -D -J')
                             ip_server= x.IP
                             
-                            y.cmd('iperf3 -c '+str(ip_server)+' -u')
+                            y.cmd('iperf3 -c '+str(ip_server)+' -u -J')
 
 
                             #CLI(net, script= myScript)
