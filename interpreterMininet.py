@@ -119,12 +119,12 @@ def wireshark_launcher():
 
 def run_recvITG(listen):
     #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin/.')
-    command_itg_receiver = net.getNodeByName(listen).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGRecv')
+    command_itg_receiver = net.getNodeByName(listen).cmd('./D-ITG-2.8.1-r1023/bin/ITGRecv')
     #p = os.system('echo %s|sudo -S %s' % ('123', command_itg_receiver))
 
-def run_sendITG(name_host,sender):
+def run_sendITG(name_host):
     #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin')
-    command = net.getNodeByName(name_host).cmd('/home/mininet/D-ITG-2.8.1-r1023/bin/./ITGSend -T UDP -a '+ sender +' -c 100 -C 10 -t 15000 \ -l sender.log -x receptor.log')
+    command = net.getNodeByName(name_host).cmd('./D-ITG-2.8.1-r1023/bin/ITGSend -T UDP -a 10.0.0.1 -c 100 -C 10 -t 15000 -l enviando.log -x recibiendo.log')
     #p = os.system('echo %s|sudo -S %s' % ('123', command))
 
 def run_decoITG(listen):
@@ -143,8 +143,7 @@ def run_client_iperf(host):
 w = threading.Thread(target=wireshark_launcher,)
 
 # Creacion de hilos para el generador de tráfico ITG
-recvITG = threading.Thread(target=run_recvITG,args=(hots_receiver,))
-sendITG = threading.Thread(target=run_sendITG,args=(host_sender,))
+
 
 def interpreter(json_data, connection):
     answer_to_client = None 
@@ -653,7 +652,23 @@ def interpreter(json_data, connection):
         
     elif (not 'pingallG' in json_data) and (not 'TCPG' in json_data) and (not 'UDPG' in json_data) and 'pingfullG' in json_data:
         print('Ping Full Global...')
-        time_e = int(json_data['time'])
+        num_total_host = len(host_added)
+        restult_file  = ''
+        recvITG = threading.Thread(target=run_recvITG,args=(str(host_added[0]),))
+        sendITG = threading.Thread(target=run_sendITG,args=(str(host_added[1]),))
+        recvITG.start()
+        sendITG.start()
+
+
+
+
+
+
+
+
+
+
+        '''time_e = int(json_data['time'])
         charge = int(json_data['pingfullG'])
         myScript = "genTraffic.sh"
         for c in range(charge):
@@ -664,7 +679,7 @@ def interpreter(json_data, connection):
                             pass
                         else:
                             CLI(net, script='genTraffic.sh')
-                '''answer_to_client = net.pingFull(timeout=time_e)
+                answer_to_client = net.pingFull(timeout=time_e)
                 charge_array[c] = answer_to_client
                 dict_answer["pingfull"] = charge_array'''
 
