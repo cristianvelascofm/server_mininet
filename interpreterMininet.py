@@ -654,10 +654,8 @@ def interpreter(json_data, connection):
         print('Ping Full Global...')
         num_total_host = len(host_added)
         restult_file  = ''
-        recvITG = threading.Thread(target=run_recvITG,args=(str(host_added[0]),))
-        sendITG = threading.Thread(target=run_sendITG,args=(str(host_added[1]),))
-        recvITG.start()
-        sendITG.start()
+        host_added[0].cmd('./D-ITG-2.8.1-r1023/bin/ITGRecv')
+        host_added[1].cmd('./D-ITG-2.8.1-r1023/bin/ITGSend -T UDP -a 10.0.0.1 -c 100 -C 10 -t 15000 -l enviando.log -x reciiendo.log')
 
 
 
