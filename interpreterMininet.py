@@ -516,10 +516,19 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data  and not 'TCPG' in json_data and 'UDPG' in json_data and not 'pingfullG' in json_data:
         print('UDP Global ...')
-        charge = int(json_data['UDPG'])
+        '''charge = int(json_data['UDPG'])
         udpBW = str(json_data['udpBw'])
-        time_e = int(json_data['time'])
-        for c in range(charge):
+        time_e = int(json_data['time'])'''
+
+        for x in host_added:
+            x.cmd('iperf3 -s -D')
+            ip_host_server= x.IP()
+            for y in host_added:
+                if str(x) == str(y):
+                    pass
+                else:
+                    y.cmd('iperf3 -c '+str(ip_host_server+' -t 10 > send'+str(y)+'.txt'))
+        '''for c in range(charge):
             for x in host_added:
                 for y in host_added:
                     if str(x) == str(y):
@@ -529,7 +538,7 @@ def interpreter(json_data, connection):
                             answer_to_client = net.iperf(hosts = [x,y],l4Type = 'UDP',udpBw = udpBW,fmt = None, seconds = time_e, port = 5001 )            
                             traffic_array[str(x)+"-"+str(y)]= answer_to_client
                             charge_array[c]= traffic_array
-                            dict_answer['UDP'] = charge_array
+                            dict_answer['UDP'] = charge_array'''
         
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
