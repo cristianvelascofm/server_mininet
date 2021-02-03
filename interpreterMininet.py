@@ -527,7 +527,7 @@ def interpreter(json_data, connection):
                 if str(x) == str(y):
                     pass
                 else:
-                    y.cmd('iperf3 -c '+str(ip_host_server+' -t 10 > send'+str(y)+'.txt'))
+                    y.cmd('iperf3 -c '+str(ip_host_server+' -t 10 > send'+str(y)+'_'+str(x)+'.txt'))
         '''for c in range(charge):
             for x in host_added:
                 for y in host_added:
