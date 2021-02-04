@@ -516,9 +516,9 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data  and not 'TCPG' in json_data and 'UDPG' in json_data and not 'pingfullG' in json_data:
         print('UDP Global ...')
-        '''charge = int(json_data['UDPG'])
+        charge = int(json_data['UDPG'])
         udpBW = str(json_data['udpBw'])
-        time_e = int(json_data['time'])'''
+        time_e = int(json_data['time'])
         file_traffic= []
         data_traffic={}
         '''for x in host_added:
