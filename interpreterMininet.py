@@ -519,7 +519,7 @@ def interpreter(json_data, connection):
         '''charge = int(json_data['UDPG'])
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])'''
-
+        file_traffic= []
         for x in host_added:
             x.cmd('iperf3 -s -D')
             ip_host_server= x.IP()
@@ -527,7 +527,17 @@ def interpreter(json_data, connection):
                 if str(x) == str(y):
                     pass
                 else:
-                    y.cmd('iperf3 -c '+str(ip_host_server+' -t 10 > send'+str(y)+'_'+str(x)+'.txt'))
+                    y.cmd('iperf3 -c '+str(ip_host_server)+' -t 10 -i 1 -J > send'+str(y)+'_'+str(x)+'.json')
+                    file_traffic.append(str(y)+'_'+str(x)+'.json')
+        for f in file_traffic:
+            archive = json.loads(open(str(file_traffic)).read())
+
+            print(archive)
+
+        
+
+
+
         '''for c in range(charge):
             for x in host_added:
                 for y in host_added:
@@ -539,6 +549,7 @@ def interpreter(json_data, connection):
                             traffic_array[str(x)+"-"+str(y)]= answer_to_client
                             charge_array[c]= traffic_array
                             dict_answer['UDP'] = charge_array'''
+        
         
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
