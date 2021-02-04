@@ -520,7 +520,7 @@ def interpreter(json_data, connection):
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])'''
         file_traffic= []
-        data_traffic=[]
+        data_traffic={}
         for x in host_added:
             x.cmd('iperf3 -s -D')
             ip_host_server= x.IP()
