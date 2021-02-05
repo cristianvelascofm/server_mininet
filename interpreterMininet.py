@@ -528,7 +528,7 @@ def interpreter(json_data, connection):
                 if str(x) == str(y):
                     pass
                 else:
-                    y.cmd('iperf3 -c '+str(ip_host_server)+' -t 10 -i 1 -J > send'+str(y)+'_'+str(x)+'.json')
+                    y.cmd('iperf3 -c '+str(ip_host_server)+' -t 2 -i 1 -J > send'+str(y)+'_'+str(x)+'.json')
                     file_traffic.append('send'+str(y)+'_'+str(x)+'.json')
         for f in file_traffic:
             archive = json.loads(open(str(f)).read())
@@ -538,9 +538,8 @@ def interpreter(json_data, connection):
         
         for name in file_traffic:
             file_name = str(name)
-            print('name: ', file_name)
-            for file_name  in data_traffic:
-                print('proob :v _ ',file_name[0])
+            algo = data_traffic[file_name]
+            print('añgo: ',algo)
                 
         
         
