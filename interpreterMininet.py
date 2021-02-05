@@ -538,14 +538,15 @@ def interpreter(json_data, connection):
             #print('data traff ', data_traffic)
             #dict_answer['UDP']= data_traffic    
         
-        for name in file_traffic:
+        for q in len(file_traffic):
             
-            local_host = data_traffic[str(name)]['start']['connected'][0]['local_host']
-            remote_host =data_traffic[str(name)]['start']['connecting_to']['host']
+            file_name = str(file_traffic[q])
+            local_host = data_traffic[file_name]['start']['connected'][0]['local_host']
+            remote_host =data_traffic[file_name]['start']['connecting_to']['host']
             print('local: ', local_host,' rem ', remote_host)
             data_gen['local_host'] = local_host
             data_gen['remote_host'] =remote_host
-            procces_data[str(name)]= data_gen
+            procces_data[file_name]= data_gen
             #algo = data_traffic[file_name]['start']['connecting_to']['host']
         print('algo: ',procces_data)
                 
