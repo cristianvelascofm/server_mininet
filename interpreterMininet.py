@@ -538,8 +538,8 @@ def interpreter(json_data, connection):
         
         for name in file_traffic:
             file_name = str(name)
-            algo = data_traffic[file_name]
-            print('añgo: ',algo)
+            algo = data_traffic[file_name]['start']['connecting_to']['host']
+            print('algo: ',algo)
                 
         
         
