@@ -533,7 +533,8 @@ def interpreter(json_data, connection):
         for f in file_traffic:
             archive = json.loads(open(str(f)).read())
             data_traffic[str(f)]= archive
-            dict_answer['UDP']= data_traffic    
+            print('data traff ', data_traffic)
+            #dict_answer['UDP']= data_traffic    
         
         for s in data_traffic:
             print('data: ',s[0])
