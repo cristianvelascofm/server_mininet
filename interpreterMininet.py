@@ -531,20 +531,19 @@ def interpreter(json_data, connection):
                     pass
                 else:
                     y.cmd('iperf3 -c '+str(ip_host_server)+' -t 2 -i 1 -J > send'+str(y)+'_'+str(x)+'.json')
-                    file_traffic.append('send'+str(y)+'_'+str(x)+'.json')
+                    file_traffic.append('send'+str(y)+'_'+str(x))
         for f in file_traffic:
-            archive = json.loads(open(str(f)).read())
+            archive = json.loads(open(str(f)+'.json').read())
             data_traffic[str(f)]= archive
             #print('data traff ', data_traffic)
             #dict_answer['UDP']= data_traffic    
         
-        for q in range(len(data_traffic)):
-            
-            file_name = str(file_traffic[q])
+        for name in file_traffic:
+            file_name = str(name)
             local_host = data_traffic[file_name]['start']['connected'][0]['local_host']
             remote_host =data_traffic[file_name]['start']['connecting_to']['host']
             print('local: ', local_host,' rem ', remote_host)
-            data_gen['local_host'] = local_host
+            data_gen['local_host'+'_'+str(file_name)] = local_host
             data_gen['remote_host'] =remote_host
             procces_data[file_name]= data_gen
             #algo = data_traffic[file_name]['start']['connecting_to']['host']
