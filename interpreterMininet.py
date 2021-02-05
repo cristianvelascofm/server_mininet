@@ -536,8 +536,10 @@ def interpreter(json_data, connection):
             print('data traff ', data_traffic)
             #dict_answer['UDP']= data_traffic    
         
-        for s in data_traffic:
-            print('data: ',s[0])
+        for name in file_traffic:
+            file_name = str(name)
+            for file_name  in data_traffic:
+                print('proob :v _ ',file_name[0])
                 
         
         
