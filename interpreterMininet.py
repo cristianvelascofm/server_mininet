@@ -521,6 +521,8 @@ def interpreter(json_data, connection):
         time_e = int(json_data['time'])'''
         file_traffic= []
         data_traffic={}
+        procces_data={}
+        data_gen= {}
         for x in host_added:
             x.cmd('iperf3 -s -D')
             ip_host_server= x.IP()
@@ -538,8 +540,12 @@ def interpreter(json_data, connection):
         
         for name in file_traffic:
             file_name = str(name)
-            algo = data_traffic[file_name]['start']['connecting_to']['host']
-            print('algo: ',algo)
+            
+            data_gen['local_host'] = data_traffic[file_name]['start']['connected']['local_host']
+            data_gen['remote_host'] =data_traffic[file_name]['start']['connected']['remote_host']
+            procces_data[file_name]= data_gen
+        
+        print('algo: ',procces_data)
                 
         
         
