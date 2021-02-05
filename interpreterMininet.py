@@ -538,7 +538,7 @@ def interpreter(json_data, connection):
             #print('data traff ', data_traffic)
             #dict_answer['UDP']= data_traffic    
         
-        for q in len(file_traffic):
+        for q in len(data_traffic):
             
             file_name = str(file_traffic[q])
             local_host = data_traffic[file_name]['start']['connected'][0]['local_host']
