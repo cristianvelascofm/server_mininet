@@ -536,11 +536,7 @@ def interpreter(json_data, connection):
             dict_answer['UDP']= data_traffic    
         
         for s in data_traffic:
-            start = s['start']
-            intervals = s['intervals']
-            end = s['end']
-            
-            print('datos: '+start )
+            print('data: ',s)
                 
         
         
