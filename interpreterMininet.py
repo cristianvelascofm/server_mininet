@@ -535,7 +535,11 @@ def interpreter(json_data, connection):
             data_traffic[str(f)]= archive
             dict_answer['UDP']= data_traffic    
         
-            
+        for s in data_traffic:
+            local_host = s['start']['connected']['local_host']
+            remote_host = s['start']['connected']['remote_host'] 
+            print('datos: '+local_host+' '+ remote_host)
+                
         
         
 
