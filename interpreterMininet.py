@@ -538,6 +538,7 @@ def interpreter(json_data, connection):
         
         for name in file_traffic:
             file_name = str(name)
+            print('name: ', file_name)
             for file_name  in data_traffic:
                 print('proob :v _ ',file_name[0])
                 
