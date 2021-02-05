@@ -541,9 +541,10 @@ def interpreter(json_data, connection):
         for name in file_traffic:
             file_name = str(name)
             local_host = data_traffic[file_name]['start']['connected'][0]['local_host']
-            print('local: ', local_host)
-            data_gen['local_host'] = data_traffic[file_name]['start']['connected'][0]['local_host']
-            data_gen['remote_host'] =data_traffic[file_name]['start']['connecting_to']['host']
+            remote_host =data_traffic[file_name]['start']['connecting_to']['host']
+            print('local: ', local_host,' rem ', remote_host)
+            data_gen['local_host'] = local_host
+            data_gen['remote_host'] =remote_host
             procces_data[file_name]= data_gen
             #algo = data_traffic[file_name]['start']['connecting_to']['host']
         print('algo: ',procces_data)
