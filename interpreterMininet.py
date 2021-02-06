@@ -548,19 +548,20 @@ def interpreter(json_data, connection):
         print('Keys Dict: ',dict_data_traffic.keys())
         for name in name_files:
             print(str(name))
-            #datos del host que actua como transmisor
+            
             l_h = dict_data_traffic[str(name)]['start']['connected'][0]
             print('tipo: ', type(l_h))
             local_host = l_h['local_host']
             l_p = dict_data_traffic[str(name)]['start']['connected'][0]
             local_port = l_p['local_port']
 
-            #datos del host que actua como servidor
+            
             remote_host = dict_data_traffic[str(name)]['start']['connecting_to']['host']
 
             data_gen['local_host'+'_'+str(name)] = local_host
             data_gen['remote_host'+'_'+str(name)] =remote_host
             procces_data[str(name)]= data_gen
+            print('fin del ciclo con ', str(name))
 
         print('Trafico Generado:', procces_data)
         
