@@ -549,11 +549,10 @@ def interpreter(json_data, connection):
         for name in name_files:
             print(str(name))
             
-            l_h = dict_data_traffic[str(name)]['start']['connected'][0]
-            print('tipo: ', type(l_h))
-            local_host = l_h['local_host']
-            l_p = dict_data_traffic[str(name)]['start']['connected'][0]
-            local_port = l_p['local_port']
+            connected = dict_data_traffic[str(name)]['start']['connected'][0]
+            print('tipo: ', type(connected))
+            local_host = connected['local_host']
+            local_port = connected['local_port']
 
             
             remote_host = dict_data_traffic[str(name)]['start']['connecting_to']['host']
@@ -562,6 +561,7 @@ def interpreter(json_data, connection):
             data_gen['remote_host'+'_'+str(name)] =remote_host
             procces_data[str(name)]= data_gen
             print('fin del ciclo con ', str(name))
+            data_gen= {}
 
         print('Trafico Generado:', procces_data)
         
