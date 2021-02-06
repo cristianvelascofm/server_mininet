@@ -546,18 +546,21 @@ def interpreter(json_data, connection):
 
         #print(dict_data_traffic)
         print('Keys Dict: ',dict_data_traffic.keys())
-        for name in name_files:
+        for name in range(name_files):
             #datos del host que actua como transmisor
-            local_host = dict_data_traffic[str(name)]['start']['connected'][0]['local_host']
-            local_port = dict_data_traffic[str(name)]['start']['connected'][0]['local_port']
+            l_h = dict_data_traffic[str(name)]['start']['connected'][0]
+            local_host = l_h['local_host']
+            l_p = dict_data_traffic[str(name)]['start']['connected'][0]
+            local_port = l_p['local_port']
 
+            #datos del host que actua como servidor
             remote_host = dict_data_traffic[str(name)]['start']['connecting_to']['host']
 
             data_gen['local_host'+'_'+str(name)] = local_host
             data_gen['remote_host'+'_'+str(name)] =remote_host
             procces_data[str(name)]= data_gen
 
-        print('Trafico Generado:'+ procces_data)
+        print('Trafico Generado:', procces_data)
         
         '''for x in host_added:
             x.cmd('iperf3 -s -D')
