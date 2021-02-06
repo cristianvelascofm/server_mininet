@@ -550,6 +550,7 @@ def interpreter(json_data, connection):
             print(str(name))
             #datos del host que actua como transmisor
             l_h = dict_data_traffic[str(name)]['start']['connected'][0]
+            print('tipo: ', type(l_h))
             local_host = l_h['local_host']
             l_p = dict_data_traffic[str(name)]['start']['connected'][0]
             local_port = l_p['local_port']
