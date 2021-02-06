@@ -545,13 +545,13 @@ def interpreter(json_data, connection):
             dict_data_traffic[str(name)] = archive_json
 
         #print(dict_data_traffic)
-        print('Keys Dict: '+dict_data_traffic.keys())
+        print('Keys Dict: ',dict_data_traffic.keys())
         for name in name_files:
             #datos del host que actua como transmisor
-            local_host = data_traffic[str(name)]['start']['connected'][0]['local_host']
-            local_port = data_traffic[str(name)]['start']['connected'][0]['local_port']
+            local_host = dict_data_traffic[str(name)]['start']['connected'][0]['local_host']
+            local_port = dict_data_traffic[str(name)]['start']['connected'][0]['local_port']
 
-            remote_host = data_traffic[str(name)]['start']['connecting_to']['host']
+            remote_host = dict_data_traffic[str(name)]['start']['connecting_to']['host']
 
             data_gen['local_host'+'_'+str(name)] = local_host
             data_gen['remote_host'+'_'+str(name)] =remote_host
