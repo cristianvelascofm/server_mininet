@@ -537,8 +537,7 @@ def interpreter(json_data, connection):
                     pass
                 else:
                     #Genera Trafico desde el host cliente al host servidor
-                    #host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t 3 -i 1 -J >'+str(host_client)+'_'+str(host_server)+'.json')
-                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t 3 -i 1 -J --logfile '+str(host_client)+'_'+str(host_server)+'.json')
+                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t 3 -i 1 -J >'+str(host_client)+'_'+str(host_server)+'.json')
                     name_files.append(str(host_client)+'_'+str(host_server))
 
         for name in name_files:
