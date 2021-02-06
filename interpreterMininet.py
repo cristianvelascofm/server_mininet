@@ -544,7 +544,7 @@ def interpreter(json_data, connection):
             archive_json = json.loads(open(str(name)+'.json').read())
             dict_data_traffic[str(name)] = archive_json
 
-        #print(dict_data_traffic)
+        print(dict_data_traffic)
         print('Keys Dict: ',dict_data_traffic.keys())
         for name in name_files:
             print(str(name))
