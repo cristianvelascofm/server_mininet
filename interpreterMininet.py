@@ -532,11 +532,13 @@ def interpreter(json_data, connection):
             #Todos los host como servidores en modo Daemon
             host_server.cmd('iperf3 -s -D')
             ip_host_server = host_server.IP()
+            
             for host_client in host_added:
                 if str(host_server) == str(host_client):
                     pass
                 else:
                     #Genera Trafico desde el host cliente al host servidor
+                    print('IP_HOST: ', ip_host_server)
                     host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t 3 -i 1 -J >'+str(host_client)+'_'+str(host_server)+'.json')
                     name_files.append(str(host_client)+'_'+str(host_server))
 
