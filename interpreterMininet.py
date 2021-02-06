@@ -544,9 +544,18 @@ def interpreter(json_data, connection):
             archive_json = json.loads(open(str(name)+'.json').read())
             dict_data_traffic[str(name)] = archive_json
 
-        print(dict_data_traffic)
+        #print(dict_data_traffic)
+        for name in name_files:
+            #datos del host que actua como transmisor
+            local_host = data_traffic[str(name + '.json')]['start']['connected'][0]['local_host']
+            local_port = data_traffic[str(name + '.json')]['start']['connected'][0]['local_port']
 
+            remote_host = data_traffic[str(name + '.json')]['start']['connecting_to']['host']
+            data_gen['local_host'+'_'+str(name)] = local_host
+            data_gen['remote_host'+'_'+str(name)] =remote_host
+            procces_data[str(name)]= data_gen
             
+        print('Trafico Generado:'+ procces_data)
         
         '''for x in host_added:
             x.cmd('iperf3 -s -D')
