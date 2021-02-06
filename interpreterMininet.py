@@ -530,8 +530,8 @@ def interpreter(json_data, connection):
                 if str(x) == str(y):
                     pass
                 else:
-                    y.cmd('iperf3 -c '+str(ip_host_server)+' -t 2 -i 1 -J > send'+str(y)+'_'+str(x)+'.json')
-                    file_traffic.append('send'+str(y)+'_'+str(x))
+                    y.cmd('iperf3 -c '+str(ip_host_server)+' -t 2 -i 1 -J > traffic_'+str(y)+'_'+str(x)+'.json')
+                    file_traffic.append('traffic_'+str(y)+'_'+str(x))
         for f in file_traffic:
             archive = json.loads(open(str(f)+'.json').read())
             data_traffic[str(f)+'.json']= archive
@@ -540,13 +540,33 @@ def interpreter(json_data, connection):
         
         for name in file_traffic:
             file_name = str(name)
+            #datos del host que actua como transmisor
             local_host = data_traffic[str(file_name + '.json')]['start']['connected'][0]['local_host']
-            remote_host =data_traffic[str(file_name + '.json')]['start']['connecting_to']['host']
-            print('local: ', local_host,' rem ', remote_host)
+            local_port = data_traffic[str(file_name + '.json')]['start']['connected'][0]['local_port']
+
+            #datos del host que actua como servidor
+            remote_host = data_traffic[str(file_name + '.json')]['start']['connecting_to']['host']
+            remote_port = data_traffic[str(file_name + '.json')]['start']['connecting_to']['port']
+
+            #datos de los parámetros del tráfico en la red
+            tcp_mss_default = data_traffic[str(file_name + '.json')]['start']['tcp_mss_default']
+            sock_bufsize = data_traffic[str(file_name + '.json')]['start']['sock_bufsize']
+            sndbuf_actual = data_traffic[str(file_name + '.json')]['start']['sndbuf_actual']
+            rcvbuf_actual = data_traffic[str(file_name + '.json')]['start']['rcvbuf_actual'] 
+
+            #datos del inicio del Test
+            protocol = data_traffic[str(file_name + '.json')]['start']['test_start']['protocol']
+            blksize =  data_traffic[str(file_name + '.json')]['start']['test_start']['blksize']
+            omit =  data_traffic[str(file_name + '.json')]['start']['test_start']['omit']
+            duration =  data_traffic[str(file_name + '.json')]['start']['test_start']['duration']
+            num_bytes =  data_traffic[str(file_name + '.json')]['start']['test_start']['bytes']
+            blocks =  data_traffic[str(file_name + '.json')]['start']['test_start']['blocks']
+            
+
             data_gen['local_host'+'_'+str(file_name)] = local_host
             data_gen['remote_host'+'_'+str(file_name)] =remote_host
             procces_data[file_name]= data_gen
-            #algo = data_traffic[file_name]['start']['connecting_to']['host']
+            
         print('algo: ',procces_data)
                 
         
