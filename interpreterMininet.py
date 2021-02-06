@@ -547,6 +547,7 @@ def interpreter(json_data, connection):
         #print(dict_data_traffic)
         print('Keys Dict: ',dict_data_traffic.keys())
         for name in name_files:
+            print(str(name))
             #datos del host que actua como transmisor
             l_h = dict_data_traffic[str(name)]['start']['connected'][0]
             local_host = l_h['local_host']
