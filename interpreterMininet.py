@@ -530,7 +530,7 @@ def interpreter(json_data, connection):
                 if str(x) == str(y):
                     pass
                 else:
-                    y.cmd('iperf3 -c ',str(ip_host_server)+' -t 2 -i 1 -J >',str(y)+'_',str(x)+'.json')
+                    y.cmd('iperf3 -c '+str(ip_host_server)+' -t 2 -i 1 -J >'+str(y)+'_'+str(x)+'.json')
                     file_traffic.append(str(y)+'_'+str(x))
                     
         for f in file_traffic:
