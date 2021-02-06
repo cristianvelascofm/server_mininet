@@ -539,6 +539,7 @@ def interpreter(json_data, connection):
             #dict_answer['UDP']= data_traffic    
         
         for name in file_traffic:
+            s = 0
             file_name = str(name)
             #datos del host que actua como transmisor
             local_host = data_traffic[str(file_name + '.json')]['start']['connected'][0]['local_host']
@@ -565,8 +566,8 @@ def interpreter(json_data, connection):
 
             data_gen['local_host'+'_'+str(file_name)] = local_host
             data_gen['remote_host'+'_'+str(file_name)] =remote_host
-            procces_data[file_name]= data_gen
-            
+            procces_data[str(file_name+s)]= data_gen
+            s = s+1
         print('algo: ',procces_data)
                 
         
