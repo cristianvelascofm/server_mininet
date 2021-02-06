@@ -519,11 +519,36 @@ def interpreter(json_data, connection):
         '''charge = int(json_data['UDPG'])
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])'''
+        name_files = []
+        dict_data_traffic = {}
+
         file_traffic= []
         data_traffic={}
         procces_data={}
         data_gen= {}
-        for x in host_added:
+        
+        
+        for host_server in host_added:
+            #Todos los host como servidores en modo Daemon
+            host_server.cmd('iperf3 -s -D')
+            
+            for host_client in host_added:
+                if str(host_server) == str(host_client):
+                    pass
+                else:
+                    #Genera Trafico desde el host cliente al host servidor
+                    host_client.cmd('iperf -c '+str(host_server.IP())+' -t 3 -i 1 -J>'+str(host_client)+'_'+str(host_server)+'.json')
+                    name_files.append(str(host_client)+'_'+str(host_server))
+
+        for name in name_files:
+            archive_json = json.loads(open(str(name)+'.json').read())
+            dict_data_traffic[str(name)]
+
+        print(dict_data_traffic)
+
+            
+        
+        '''for x in host_added:
             x.cmd('iperf3 -s -D')
             ip_host_server= x.IP()
             for y in host_added:
@@ -569,7 +594,7 @@ def interpreter(json_data, connection):
             data_gen['remote_host'+'_'+str(file_name)] =remote_host
             procces_data[str(file_name)+str(s)]= data_gen
             s = s+1 
-        print('algo: ',procces_data)
+        print('algo: ',procces_data)'''
                 
         
         
