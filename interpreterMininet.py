@@ -567,7 +567,7 @@ def interpreter(json_data, connection):
 
             data_gen['local_host'+'_'+str(file_name)] = local_host
             data_gen['remote_host'+'_'+str(file_name)] =remote_host
-            procces_data[str(file_name+s)]= data_gen
+            procces_data[str(file_name)+str(s)]= data_gen
             s = s+1 
         print('algo: ',procces_data)
                 
