@@ -521,7 +521,7 @@ def interpreter(json_data, connection):
         time_e = int(json_data['time'])'''
         #Datos del modo de transmision
         #Solo una de estas tres opciones
-        time = str(2)
+        time_e = str(2)
         number = '0k'
         block = '0k'
 
@@ -551,7 +551,7 @@ def interpreter(json_data, connection):
                 else:
                     #Genera Trafico desde el host cliente al host servidor
                     #print('IP_HOST: ', ip_host_server)
-                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t '+time+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json')
+                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json')
                     name_files.append(str(host_client)+'_'+str(host_server))
 
         for name in name_files:
