@@ -519,6 +519,17 @@ def interpreter(json_data, connection):
         '''charge = int(json_data['UDPG'])
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])'''
+        #Datos del modo de transmision
+        #Solo una de estas tres opciones
+        time = str(2)
+        number = '0k'
+        block = '0k'
+
+        interval = str(1)
+        window = '500k'
+        length = '1m'
+        
+
         name_files = []
         dict_data_traffic = {}
 
@@ -532,14 +543,15 @@ def interpreter(json_data, connection):
             #Todos los host como servidores en modo Daemon
             host_server.cmd('iperf3 -s -D')
             ip_host_server = host_server.IP()
+            time.sleep(5)
             
             for host_client in host_added:
                 if str(host_server) == str(host_client):
                     pass
                 else:
                     #Genera Trafico desde el host cliente al host servidor
-                    print('IP_HOST: ', ip_host_server)
-                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t 3 -i 1 -J >'+str(host_client)+'_'+str(host_server)+'.json')
+                    #print('IP_HOST: ', ip_host_server)
+                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t '+time+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json')
                     name_files.append(str(host_client)+'_'+str(host_server))
 
         for name in name_files:
@@ -549,19 +561,48 @@ def interpreter(json_data, connection):
         print(dict_data_traffic)
         print('Keys Dict: ',dict_data_traffic.keys())
         for name in name_files:
-            print(str(name))
+            #print(str(name))
             connected = dict_data_traffic[str(name)]['start']['connected'][0]
-            print('tipo: ', type(connected))
+            #print('tipo: ', type(connected))
+
+            #datos del host que actua como transmisor
             local_host = connected['local_host']
             local_port = connected['local_port']
 
-            
+            #datos del host que actua como servidor
             remote_host = dict_data_traffic[str(name)]['start']['connecting_to']['host']
+            remote_port = dict_data_traffic[str(name)]['start']['connecting_to']['port']
 
-            data_gen['local_host'+'_'+str(name)] = local_host
-            data_gen['remote_host'+'_'+str(name)] =remote_host
+            #datos de los parámetros del tráfico en la red
+            tcp_mss_default = dict_data_traffic[str(name)]['start']['tcp_mss_default']
+            sock_bufsize = dict_data_traffic[str(name)]['start']['sock_bufsize']
+            sndbuf_actual = dict_data_traffic[str(name)]['start']['sndbuf_actual']
+            rcvbuf_actual = dict_data_traffic[str(name)]['start']['rcvbuf_actual'] 
+
+            #datos del inicio del Test
+            protocol = dict_data_traffic[str(name)]['start']['test_start']['protocol']
+            blksize =  dict_data_traffic[str(name)]['start']['test_start']['blksize']
+            omit =  dict_data_traffic[str(name)]['start']['test_start']['omit']
+            duration =  dict_data_traffic[str(name)]['start']['test_start']['duration']
+            num_bytes =  dict_data_traffic[str(name)]['start']['test_start']['bytes']
+            blocks =  dict_data_traffic[str(name)]['start']['test_start']['blocks']
+
+            data_gen['local_host'] = local_host
+            data_gen['local_port'] = local_port
+            data_gen['remote_host'] = remote_host
+            data_gen['remote_port'] = remote_port
+            data_gen['tcp_mss_default'] = tcp_mss_default
+            data_gen['sock_bufsize'] = sock_bufsize
+            data_gen['sndbuf_actual'] = sndbuf_actual
+            data_gen['rcvbuf_actual'] = rcvbuf_actual
+            data_gen['protocol'] = protocol
+            data_gen['blksize'] = blksize
+            data_gen['omit'] = omit
+            data_gen['duration'] = duration
+            data_gen['num_bytes'] = num_bytes
+            data_gen['blocks'] = blocks
+                        
             procces_data[str(name)]= data_gen
-            print('fin del ciclo con ', str(name))
             data_gen= {}
 
         print('Trafico Generado:', procces_data)
