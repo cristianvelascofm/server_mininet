@@ -482,24 +482,45 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP Global ...')
-        charge = int(json_data['TCPG'])
-        udpBW = str(json_data['udpBw'])
-        time_e = int(json_data['time'])
         
-        for c in range(charge):
-            '''for x in host_added:
-                for y in host_added:
-                    if str(x) == str(y):
-                        pass
-                    else:'''
-            if net != None:
-                host_sender = net.getNodeByName(str(host_added[0])).cmd('ifconfig')
-                hots_receiver = str(host_added[1])
+        port_list =[]
+        initial_port = 5000
 
-                run_recvITG(hots_receiver)
-                run_sendITG(str(host_added[0]),host_sender)
-                reso = run_decoITG(str(host_added[0]))
-                print(reso)
+        #Datos del modo de transmision
+        #Solo una de estas tres opciones
+        time_e = str(5)
+        number = '0k'
+        block = '0k'
+
+        interval = str(1)
+        window = '500k'
+        length = '1m'
+        
+
+        name_files = []
+        dict_data_traffic = {}
+
+        file_traffic= []
+        data_traffic={}
+        procces_data={}
+        data_gen= {}
+        
+        #Lista de Puertos ()
+        for pt in len(host_added)-1:
+            initial_port = initial_port + 1
+            port_list.append(str(initial_port))
+
+        for host_server in host_added:
+            for port in port_list:
+                host_server.cdm('iperf3 -s -D -p '+str(port))
+                time.sleep(5)
+                for host_client in host_added:
+                    if host_server == host_client:
+                        pass
+                    else:
+                        host_client.cmd('iperf3 -c '+str(host_server.IP())+' -p '+port+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json'+' &')
+
+        
                 
                 #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
                 #traffic_array[str(x)+"-"+str(y)]= answer_to_client
@@ -516,6 +537,10 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data  and not 'TCPG' in json_data and 'UDPG' in json_data and not 'pingfullG' in json_data:
         print('UDP Global ...')
+        port_list =[]
+        initial_port = 5000
+
+
         '''charge = int(json_data['UDPG'])
         udpBW = str(json_data['udpBw'])
         time_e = int(json_data['time'])'''
@@ -537,7 +562,7 @@ def interpreter(json_data, connection):
         data_traffic={}
         procces_data={}
         data_gen= {}
-        
+
         
         for host_server in host_added:
             #Todos los host como servidores en modo Daemon
@@ -551,7 +576,7 @@ def interpreter(json_data, connection):
                 else:
                     #Genera Trafico desde el host cliente al host servidor
                     #print('IP_HOST: ', ip_host_server)
-                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json')
+                    host_client.cmd('iperf3 -c '+str(ip_host_server)+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json'+' &')
                     name_files.append(str(host_client)+'_'+str(host_server))
 
         for name in name_files:
@@ -586,6 +611,8 @@ def interpreter(json_data, connection):
             duration =  dict_data_traffic[str(name)]['start']['test_start']['duration']
             num_bytes =  dict_data_traffic[str(name)]['start']['test_start']['bytes']
             blocks =  dict_data_traffic[str(name)]['start']['test_start']['blocks']
+                
+
 
             data_gen['local_host'] = local_host
             data_gen['local_port'] = local_port
