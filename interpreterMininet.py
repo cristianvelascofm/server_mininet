@@ -482,7 +482,7 @@ def interpreter(json_data, connection):
 
     elif not 'pingallG' in json_data and 'TCPG' in json_data and  not 'UDPG' in json_data :
         print('TCP Global ...')
-        
+        host_size= (len(host_added))-1
         port_list =[]
         initial_port = 5000
 
@@ -506,7 +506,7 @@ def interpreter(json_data, connection):
         data_gen= {}
         
         #Lista de Puertos ()
-        for pt in len(host_added)-1:
+        for pt in range(host_size):
             initial_port = initial_port + 1
             port_list.append(str(initial_port))
 
@@ -520,7 +520,7 @@ def interpreter(json_data, connection):
                     else:
                         host_client.cmd('iperf3 -c '+str(host_server.IP())+' -p '+port+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json'+' &')
 
-        
+
                 
                 #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
                 #traffic_array[str(x)+"-"+str(y)]= answer_to_client
