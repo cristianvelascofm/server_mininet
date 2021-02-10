@@ -512,7 +512,7 @@ def interpreter(json_data, connection):
 
         for host_server in host_added:
             for port in port_list:
-                host_server.cdm('iperf3 -s -D -p '+str(port))
+                host_server.cmd('iperf3 -s -D -p '+str(port))
                 time.sleep(5)
                 for host_client in host_added:
                     if host_server == host_client:
