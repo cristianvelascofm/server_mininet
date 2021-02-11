@@ -538,12 +538,10 @@ def interpreter(json_data, connection):
         
 
         for name in name_files:
-            with open (str(name)+'.json','r') as archive_json:
-                data_json = json.loads(archive_json.read())
-                #archive_json = json.loads(open(str(name)+'.json').read())
+                archive_json = json.loads(open(str(name)+'.json').read())
                 dict_data_traffic[str(name)] = archive_json
 
-        #print(dict_data_traffic)
+        print(dict_data_traffic)
         #print('Keys Dict: ',dict_data_traffic.keys())
         for name in name_files:
             #print(str(name))
