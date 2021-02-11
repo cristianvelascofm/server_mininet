@@ -529,7 +529,7 @@ def interpreter(json_data, connection):
                         if str(server[0]) == str(host_client):
                             pass
                         else:
-                            host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json'+' &')
+                            host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(server[0])+'.json'+' &')
                             temp = str(host_client)+'_'+str(server[0])
                             ax = str(server)
                             buffer_server.append(temp)
