@@ -534,7 +534,61 @@ def interpreter(json_data, connection):
                             ax = str(server)
                             buffer_server.append(temp)
                             buffer_server.append(ax)
+                            name_files.append(str(host_client)+'_'+str(host_server))
+        
 
+        for name in name_files:
+            archive_json = json.loads(open(str(name)+'.json').read())
+            dict_data_traffic[str(name)] = archive_json
+
+        #print(dict_data_traffic)
+        #print('Keys Dict: ',dict_data_traffic.keys())
+        for name in name_files:
+            #print(str(name))
+            connected = dict_data_traffic[str(name)]['start']['connected'][0]
+            #print('tipo: ', type(connected))
+
+            #datos del host que actua como transmisor
+            local_host = connected['local_host']
+            local_port = connected['local_port']
+
+            #datos del host que actua como servidor
+            remote_host = dict_data_traffic[str(name)]['start']['connecting_to']['host']
+            remote_port = dict_data_traffic[str(name)]['start']['connecting_to']['port']
+
+            #datos de los parámetros del tráfico en la red
+            tcp_mss_default = dict_data_traffic[str(name)]['start']['tcp_mss_default']
+            sock_bufsize = dict_data_traffic[str(name)]['start']['sock_bufsize']
+            sndbuf_actual = dict_data_traffic[str(name)]['start']['sndbuf_actual']
+            rcvbuf_actual = dict_data_traffic[str(name)]['start']['rcvbuf_actual'] 
+
+            #datos del inicio del Test
+            protocol = dict_data_traffic[str(name)]['start']['test_start']['protocol']
+            blksize =  dict_data_traffic[str(name)]['start']['test_start']['blksize']
+            omit =  dict_data_traffic[str(name)]['start']['test_start']['omit']
+            duration =  dict_data_traffic[str(name)]['start']['test_start']['duration']
+            num_bytes =  dict_data_traffic[str(name)]['start']['test_start']['bytes']
+            blocks =  dict_data_traffic[str(name)]['start']['test_start']['blocks']
+                
+
+
+            data_gen['local_host'] = local_host
+            data_gen['local_port'] = local_port
+            data_gen['remote_host'] = remote_host
+            data_gen['remote_port'] = remote_port
+            data_gen['tcp_mss_default'] = tcp_mss_default
+            data_gen['sock_bufsize'] = sock_bufsize
+            data_gen['sndbuf_actual'] = sndbuf_actual
+            data_gen['rcvbuf_actual'] = rcvbuf_actual
+            data_gen['protocol'] = protocol
+            data_gen['blksize'] = blksize
+            data_gen['omit'] = omit
+            data_gen['duration'] = duration
+            data_gen['num_bytes'] = num_bytes
+            data_gen['blocks'] = blocks
+                        
+            procces_data[str(name)]= data_gen
+            data_gen= {}
 
                 
                 #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
