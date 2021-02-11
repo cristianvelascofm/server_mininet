@@ -510,15 +510,30 @@ def interpreter(json_data, connection):
             initial_port = initial_port + 1
             port_list.append(str(initial_port))
 
+
+        aux_array = []
+
         for host_server in host_added:
             for port in port_list:
                 host_server.cmd('iperf3 -s -D -p '+str(port))
                 time.sleep(5)
-                for host_client in host_added:
-                    if host_server == host_client:
-                        pass
-                    else:
-                        host_client.cmd('iperf3 -c '+str(host_server.IP())+' -p '+port+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json'+' &')
+                aux = [host_server, port]
+                aux_array.append(aux)
+
+        buffer_server = []
+
+        for server in aux_array:
+            for host_client in host_added:
+                if not (str(host_client)+'_'+str(server[0])) in buffer_server:
+                    if not str(server) in buffer_server:
+                        if str(server[0]) == str(host_client):
+                            pass
+                        else:
+                            host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -w '+window+' -J >'+str(host_client)+'_'+str(host_server)+'.json'+' &')
+                            temp = str(host_client)+'_'+str(server[0])
+                            ax = str(server)
+                            buffer_server.append(temp)
+                            buffer_server.append(ax)
 
 
                 
