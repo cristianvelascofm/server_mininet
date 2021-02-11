@@ -534,7 +534,7 @@ def interpreter(json_data, connection):
                             ax = str(server)
                             buffer_server.append(temp)
                             buffer_server.append(ax)
-                            name_files.append(str(host_client)+'_'+str(host_server))
+                            name_files.append(str(host_client)+'_'+str(server[0]))
         
 
         for name in name_files:
