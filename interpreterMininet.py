@@ -603,6 +603,7 @@ def interpreter(json_data, connection):
                 data_speciffic['sender'] = sender
 
                 times['t_'+str(t)] = data_speciffic
+                data_speciffic = {}
 
             data_gen['local_host'] = local_host
             data_gen['local_port'] = local_port
