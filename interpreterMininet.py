@@ -535,8 +535,8 @@ def interpreter(json_data, connection):
                             buffer_server.append(temp)
                             buffer_server.append(ax)
                             name_files.append(str(host_client)+'_'+str(server[0]))
-        
-
+        #Tiempo de espera para q se generen por completo los archivos JSON
+        time.sleep(5)
         for name in name_files:
                 archive_json = json.loads(open(str(name)+'.json').read())
                 dict_data_traffic[str(name)] = archive_json
@@ -570,7 +570,39 @@ def interpreter(json_data, connection):
             num_bytes =  dict_data_traffic[str(name)]['start']['test_start']['bytes']
             blocks =  dict_data_traffic[str(name)]['start']['test_start']['blocks']
                 
+            #Resultados del Tráfico generado
+            rang = time_e/interval
+            intervals = dict_data_traffic[str(name)]['intervals']
+            times = {}
+            data_speciffic= {}
+            traffic = {}
+            for t in range(rang):
+                streams = intervals[t]['streams'][0]
+                start = streams['start']
+                end = streams['end']
+                n_bytes = streams['bytes']
+                bits_per_second = streams['bits_per_second']
+                retransmits = streams['retransmits']
+                snd_cwnd = streams['snd_cwnd']
+                rtt = streams['rtt']
+                rttvar = streams['rttvar']
+                pmtu = streams['pmtu']
+                omitted = streams['omitted']
+                sender = streams['sender']
 
+                data_speciffic['start'] = start
+                data_speciffic['end'] = end
+                data_speciffic['n_bytes'] = n_bytes
+                data_speciffic['bits_per_second'] = bits_per_second
+                data_speciffic['retransmits'] = retransmits
+                data_speciffic['snd_cwnd'] = snd_cwnd
+                data_speciffic['rtt'] = rtt
+                data_speciffic['rttvar'] = rttvar
+                data_speciffic['pmtu'] = pmtu
+                data_speciffic['omitted'] = omitted
+                data_speciffic['sender'] = sender
+
+                times['t_'+str(t)] = data_speciffic
 
             data_gen['local_host'] = local_host
             data_gen['local_port'] = local_port
@@ -586,8 +618,10 @@ def interpreter(json_data, connection):
             data_gen['duration'] = duration
             data_gen['num_bytes'] = num_bytes
             data_gen['blocks'] = blocks
-                        
-            procces_data[str(name)]= data_gen
+            procces_data['speciffic'] = times
+            procces_data['general']= data_gen
+            traffic[str(name)] = procces_data
+            
             data_gen= {}
 
                 
