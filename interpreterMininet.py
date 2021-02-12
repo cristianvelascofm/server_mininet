@@ -571,7 +571,7 @@ def interpreter(json_data, connection):
             blocks =  dict_data_traffic[str(name)]['start']['test_start']['blocks']
                 
             #Resultados del Tráfico generado
-            rang = time_e/interval
+            rang = int(time_e)/int(interval)
             intervals = dict_data_traffic[str(name)]['intervals']
             times = {}
             data_speciffic= {}
