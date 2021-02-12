@@ -624,6 +624,7 @@ def interpreter(json_data, connection):
             traffic[str(name)] = procces_data
             
             data_gen= {}
+            times = {}
         print('Trafico!!!: ', traffic)
                 
                 #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
