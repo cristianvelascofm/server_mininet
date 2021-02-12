@@ -536,7 +536,7 @@ def interpreter(json_data, connection):
                             buffer_server.append(ax)
                             name_files.append(str(host_client)+'_'+str(server[0]))
         #Tiempo de espera para q se generen por completo los archivos JSON
-        time.sleep(5)
+        time.sleep(int(time_e) + 2)
         for name in name_files:
                 archive_json = json.loads(open(str(name)+'.json').read())
                 dict_data_traffic[str(name)] = archive_json
