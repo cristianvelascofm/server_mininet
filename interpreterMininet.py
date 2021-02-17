@@ -636,8 +636,8 @@ def interpreter(json_data, connection):
                 #dict_answer['TCP'] = charge_array
                 #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
 
-        dict_answer['Traffic'] = traffic
-        f = json.dumps(dict_answer)
+        
+        f = json.dumps(traffic)
         connection.sendall(f.encode())
         dict_answer = {}
         traffic = {}
