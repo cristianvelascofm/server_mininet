@@ -543,6 +543,7 @@ def interpreter(json_data, connection):
 
         #print(dict_data_traffic)
         #print('Keys Dict: ',dict_data_traffic.keys())
+        traffic = {}
         for name in name_files:
             #print(str(name))
             connected = dict_data_traffic[str(name)]['start']['connected'][0]
@@ -575,7 +576,7 @@ def interpreter(json_data, connection):
             intervals = dict_data_traffic[str(name)]['intervals']
             times = {}
             data_speciffic= {}
-            traffic = {}
+
             for t in range(rang):
                 streams = intervals[t]['streams'][0]
                 start = streams['start']
@@ -621,12 +622,13 @@ def interpreter(json_data, connection):
             data_gen['blocks'] = blocks
             procces_data['speciffic'] = times
             procces_data['general']= data_gen
+            
             traffic[str(name)] = procces_data
             
             data_gen= {}
             times = {}
             procces_data = {}
-        print('Trafico!!!: ', traffic)
+        #print('Trafico!!!: ', traffic)
                 
                 #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
                 #traffic_array[str(x)+"-"+str(y)]= answer_to_client
@@ -634,10 +636,11 @@ def interpreter(json_data, connection):
                 #dict_answer['TCP'] = charge_array
                 #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
 
-            
+        dict_answer['Traffic'] = traffic
         f = json.dumps(dict_answer)
         connection.sendall(f.encode())
         dict_answer = {}
+        traffic = {}
         answer_to_client = None
         return True
 
