@@ -600,8 +600,8 @@ def interpreter(json_data, connection):
                 data_speciffic['rtt'] = rtt
                 data_speciffic['rttvar'] = rttvar
                 data_speciffic['pmtu'] = pmtu
-                data_speciffic['omitted'] = omitted
-                data_speciffic['sender'] = sender
+                data_speciffic['omitted'] = str(omitted)
+                data_speciffic['sender'] = str(sender)
 
                 times['t_'+str(t)] = data_speciffic
                 data_speciffic = {}
