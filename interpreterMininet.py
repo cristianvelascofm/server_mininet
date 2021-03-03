@@ -146,6 +146,7 @@ w = threading.Thread(target=wireshark_launcher,)
 
 
 def interpreter(json_data, connection):
+    
     answer_to_client = None 
     charge_array = {}
     traffic_array = {}
@@ -174,7 +175,7 @@ def interpreter(json_data, connection):
         ans = {}
         return True
 
-    elif('TCP' in json_data):
+    elif 'TCP' in json_data:
         #Tipos de Distribucion del Tráfico
         if('global' in json_data):
 
@@ -192,6 +193,7 @@ def interpreter(json_data, connection):
             interval = str(1)
             window = '500k'
             length = '1m'
+            bw = '1k'
             
 
             name_files = []
@@ -225,6 +227,8 @@ def interpreter(json_data, connection):
                             if str(server[0]) == str(host_client):
                                 pass
                             else:
+                                #Posibles casos de parametrizacion del Trafico en Iperf3.1
+                                #Solo el parámetro de Tiempo 
                                 if('t' in json_data and (not 'i' in json_data) and (not 'l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
                                     time_e = str(json_data['t'])
                                     host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
@@ -233,9 +237,347 @@ def interpreter(json_data, connection):
                                     buffer_server.append(temp)
                                     buffer_server.append(ax)
                                     name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parámetro de Tiempo con Intervalo 
+                                elif('t' in json_data and ('i' in json_data) and (not 'l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Longitud 
+                                elif('t' in json_data and (not 'i' in json_data) and ('l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    length = str(json_data['i'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -l '+length+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Ancho de Banda
+                                elif('t' in json_data and (not 'i' in json_data) and (not 'l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    bw = str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                    pass
+                                #Solo el parametro de Tiempo con Ventana
+                                elif('t' in json_data and (not 'i' in json_data) and (not 'l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Intervalo y Longitud
+                                elif('t' in json_data and ('i' in json_data) and ( 'l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    length =  str(json_data['l'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -l '+length+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Intervalo y Ancho de Banda
+                                elif('t' in json_data and ('i' in json_data) and ( not 'l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    bw =  str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Longitud y Ventana
+                                elif('t' in json_data and (not 'i' in json_data) and ('l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    length = str(json_data['l'])
+                                    window =  str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -l '+length+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con  Ancho de Banda y Ventana
+                                elif('t' in json_data and (not 'i' in json_data) and (not 'l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    window = str(json_data['w'])
+                                    bw =  str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -w '+window+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parametro de Tiempo con Intervalo y Ventana 
+                                elif('t' in json_data and ('i' in json_data) and ( not 'l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    window =  str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parametro de Tiempo con Intervalo Longitud  Ancho de Banda
+                                elif('t' in json_data and ('i' in json_data) and ( 'l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    length =  str(json_data['l'])
+                                    bw = str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -l '+length+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Intervalo Longitud  Ventana
+                                elif('t' in json_data and ('i' in json_data) and ( 'l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    length =  str(json_data['l'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -l '+length+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Ancho de Banda Longitud  Ventana
+                                elif('t' in json_data and (not 'i' in json_data) and ( 'l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    bw = str(json_data['b'])
+                                    length =  str(json_data['l'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -b '+bw+' -l '+length+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parametro de Tiempo con Intervalo Longitud  Ancho de Banda Ventana
+                                elif('t' in json_data and ('i' in json_data) and ( 'l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    interval = str(json_data['i'])
+                                    length =  str(json_data['l'])
+                                    bw = str(json_data['b'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -l '+length+' -b '+bw+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo
+                                elif(not 't' in json_data and ('i' in json_data) and (not 'l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo y Longitud
+                                elif(not 't' in json_data and ('i' in json_data) and ('l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    length = str(json_data['l'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -l ' +length+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo y Anchode Banda
+                                elif(not 't' in json_data and ('i' in json_data) and (not 'l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    bw = str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo y Ventana
+                                elif(not 't' in json_data and ('i' in json_data) and (not 'l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo, Anchode Banda y Longitud
+                                elif(not 't' in json_data and ('i' in json_data) and ('l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    bw = str(json_data['b'])
+                                    length = str(json_data['l'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -b '+bw+' -l '+length+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo, Anchode Banda y Window
+                                elif(not 't' in json_data and ('i' in json_data) and (not 'l' in json_data) and ( 'b' in json_data) and ( 'w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    bw = str(json_data['b'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -b '+bw+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Intervalo, Longitud y Window
+                                elif(not 't' in json_data and ('i' in json_data) and ('l' in json_data) and (not 'b' in json_data) and ( 'w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    length = str(json_data['l'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -l '+length+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
 
 
+                                #Solo el parámetro de Intervalo, Anchode Banda, Longitud y Window
+                                elif(not 't' in json_data and ('i' in json_data) and ('l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    interval = str(json_data['i'])
+                                    bw = str(json_data['b'])
+                                    length = str(json_data['l'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -i '+interval+' -b '+bw+' -l '+length+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
 
+                              #Solo el parámetro de Longitud
+                                elif(not 't' in json_data and (not 'i' in json_data) and ('l' in json_data) and (not 'b' in json_data) and (not 'w' in json_data)):
+                                    length = str(json_data['l'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -l '+length+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                              #Solo el parámetro de Longitud y Ancho de Banda
+                                elif(not 't' in json_data and (not 'i' in json_data) and ('l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    length = str(json_data['l'])
+                                    bw = str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -l '+length+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Longitud y Ventana
+                                elif(not 't' in json_data and (not 'i' in json_data) and ('l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    length = str(json_data['l'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -l '+length+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                #Solo el parámetro de Longitud   Ancho de Banda y Ventana
+                                elif(not 't' in json_data and (not 'i' in json_data) and ('l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    length = str(json_data['l'])
+                                    bw = str(json_data['b'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -l '+length+' -b '+bw+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+                                
+                                #Solo el parámetro de Ancho de Banda
+                                elif(not 't' in json_data and (not 'i' in json_data) and (not 'l' in json_data) and ('b' in json_data) and (not 'w' in json_data)):
+                                    bw = str(json_data['b'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -b '+bw+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de  Ancho de Banda y Ventana
+                                elif(not 't' in json_data and (not 'i' in json_data) and (not 'l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    
+                                    bw = str(json_data['b'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -b '+bw+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                #Solo el parámetro de Longitud   Ancho de Banda y Ventana
+                                elif(not 't' in json_data and (not 'i' in json_data) and ('l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    length = str(json_data['l'])
+                                    bw = str(json_data['b'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -l '+length+' -b '+bw+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                 #Solo el parametro de Tiempo Intervalo  Ancho de Banda Ventana
+                                elif('t' in json_data and ('i' in json_data) and (not 'l' in json_data) and ('b' in json_data) and ('w' in json_data)):
+                                    time_e = str(json_data['t'])
+                                    bw = str(json_data['b'])
+                                    interval =  str(json_data['i'])
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -b '+bw+' -i '+interval+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+
+                                 #Solo el parametro de  Ventana
+                                elif(not 't' in json_data and (not 'i' in json_data) and (not'l' in json_data) and (not 'b' in json_data) and ('w' in json_data)):
+                                    window = str(json_data['w'])
+                                    host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
+                                    temp = str(host_client)+'_'+str(server[0])
+                                    ax = str(server)
+                                    buffer_server.append(temp)
+                                    buffer_server.append(ax)
+                                    name_files.append(str(host_client)+'_'+str(server[0]))
+    
                             #host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
                             
         #Tiempo de espera para q se generen por completo los archivos JSON
@@ -347,38 +689,6 @@ def interpreter(json_data, connection):
             answer_to_client = None
             return True
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            pass
-
         elif('xtreme' in json_data):
             pass
         elif('specific' in json_data):
@@ -386,7 +696,8 @@ def interpreter(json_data, connection):
         pass
 
 
-
+    elif ('UDP' in json_data):
+        pass
 
     elif ('pingall' in json_data) and (not 'TCP' in json_data) and (not 'UDP' in json_data) and not 'pingfull' in json_data:
         print('Ping All ...')
