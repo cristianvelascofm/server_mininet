@@ -581,7 +581,7 @@ def interpreter(json_data, connection):
                             #host_client.cmd('iperf3 -c '+str(server[0].IP())+' -p '+str(server[1])+' -t '+time_e+' -i '+interval+' -w '+window+' -J>'+str(host_client)+'_'+str(server[0])+'.json'+' &')
                             
         #Tiempo de espera para q se generen por completo los archivos JSON
-            time.sleep(int(time_e) + 2)
+            time.sleep(int(time_e) + 5)
             for name in name_files:
                     archive_json = json.loads(open(str(name)+'.json').read())
                     dict_data_traffic[str(name)] = archive_json
