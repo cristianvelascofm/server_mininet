@@ -1,6 +1,6 @@
 # -*-coding:utf-8-*-
 #!/usr/bin/python
-
+#damos mas 
 import socket
 import sys
 import os
