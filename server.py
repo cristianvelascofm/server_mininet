@@ -10,7 +10,7 @@ import time
 import threading
 from threading import Timer
 
-from interpreterMininet import interpreter
+from proob_server import interpreter
 
 # Creacion dinamica de variables
 g = globals()
