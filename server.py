@@ -54,8 +54,8 @@ while True:
                 print("MENSAJE ENTRANTE:", json_data)
                 print('---------------------------')
                 aux = interpreter(json_data, connection)
-                if not aux:
-                    break
+                #if not aux:
+                 #   break
 
     
         pass
