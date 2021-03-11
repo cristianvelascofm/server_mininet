@@ -135,14 +135,15 @@ def interpreter(json_data, connection):
         if act == "stop":
             print("Terminando Emulacion ...")
             #CLI(net,script= "stop.sh")
-            net.stop()
+            os.system('mn -c')
+            #net.stop()
             ans = {}
             ans['emulacion'] = 'terminada'
             f = json.dumps(ans)
             connection.sendall(f.encode())
             ans = {}
 
-        return False
+        return True
 
     else:
         print('Creando el Arreglo de la Red ...')
