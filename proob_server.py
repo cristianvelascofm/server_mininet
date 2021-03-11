@@ -91,8 +91,15 @@ def run_mininet():
         s.stop()
     for c in controller_added:
         c.stop()
-    for l in link_added:
-        l.stop()
+    for n in link_array:
+        l = n['cn'].split(",")
+        for m in switch_added:
+            if l[0] == m.name:
+                for j in host_added:
+                    if l[1] == j.name:
+                        link_added.append(net.delLink(
+                            m, j, intfName1=n['intfName1'], intfName2=n['intfName2']))
+
     print('Terminado')
 
 
