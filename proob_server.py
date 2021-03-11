@@ -48,38 +48,6 @@ host_sender = None
 #net = Mininet(build=False)
 net = Mininet()
 
-def traffic_udp_simple():
-    file = open("udp.sh", "w")
-    file.write("iperfudp"+'\n')
-    file.close()
-
-
-def traffic_tcp_total():
-    aux = ""
-    for x in host_container:
-        for y in host_container:
-            if str(x) == str(y):
-                pass
-            else:
-                aux = aux + "iperf "+str(x) + " " + str(y) + "\n"
-    file = open("tcp.sh", "w")
-    file.write(aux)
-    file.close()
-
-
-def traffic_udp_total():
-    aux = ""
-    for x in host_container:
-        for y in host_container:
-            if str(x) == str(y):
-                pass
-            else:
-                aux = aux + "iperfudp "+ "1024 "+str(x) + " " + str(y) + "\n"
-    file = open("udp.sh", "w")
-    file.write(aux)
-    file.close()
-
-
 def run_mininet():
     
     print('Creacion de la Red ...')
@@ -116,6 +84,12 @@ def run_mininet():
     net.pingAll()
     print('Hecho Ping')
     net.stop()
+    for h in host_added:
+        h.stop()
+    for s in switch_added:
+        s.stop()
+    for c in controller_added:
+        c.stop()
 
 
 def wireshark_launcher():
