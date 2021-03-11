@@ -45,7 +45,8 @@ hots_receiver = None
 host_sender = None
 
 # Creacion de la red en Mininet
-net = Mininet(build=False)
+#net = Mininet(build=False)
+net = Mininet()
 
 def traffic_udp_simple():
     file = open("udp.sh", "w")
