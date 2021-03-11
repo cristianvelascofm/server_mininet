@@ -112,6 +112,9 @@ def run_mininet():
     net.build()
     net.start()
     print('RED INICIADA!! ...')
+    net.pingAll()
+    print('Hecho Ping')
+    net.stop()
 
 
 def wireshark_launcher():
