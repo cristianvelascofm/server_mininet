@@ -38,6 +38,7 @@ port_container = []
 host_added = []
 switch_added = []
 controller_added = []
+link_added = []
 
 #Variables para la generacion de trafico ITG
 
@@ -74,8 +75,8 @@ def run_mininet():
             if l[0] == m.name:
                 for j in host_added:
                     if l[1] == j.name:
-                        net.addLink(
-                            m, j, intfName1=n['intfName1'], intfName2=n['intfName2'])
+                        link_added.append(net.addLink(
+                            m, j, intfName1=n['intfName1'], intfName2=n['intfName2']))
 
     print('Links Creados ...')
     net.build()
@@ -83,13 +84,16 @@ def run_mininet():
     print('RED INICIADA!! ...')
     net.pingAll()
     print('Hecho Ping')
-    net.stop()
+    #net.stop()
     for h in host_added:
         h.stop()
     for s in switch_added:
         s.stop()
     for c in controller_added:
         c.stop()
+    for l in link_added:
+        l.stop()
+    print('Terminado')
 
 
 def wireshark_launcher():
@@ -135,7 +139,7 @@ def interpreter(json_data, connection):
             aux = aux+ip
         # Establece en el Bash la direccion del cliente  en el DISPPLAY
         os.environ["DISPLAY"] = aux+':0.0'
-        w.start()
+        #w.start()
         for x in array_data:
             id = x['id'][0]
             if id == 'h':
