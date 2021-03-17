@@ -212,10 +212,10 @@ def interpreter(json_data, connection):
 
 
             aux_array = []
-
+            #Se colocan los host como servidor en el puerto indicado
             for host_server in host_added:
                 for port in port_list:
-                    host_server.cmd('iperf3 -s -D -p '+str(port))
+                    host_server.cmd('iperf3 -s -D -p '+str(port)+' -J>'+str(host_server)+'_'+str(port)+'.json'+' &')
                     time.sleep(3)
                     aux = [host_server, port]
                     aux_array.append(aux)
@@ -1131,7 +1131,7 @@ def interpreter(json_data, connection):
                 remote_port = dict_data_traffic[str(name)]['start']['connecting_to']['port']
 
                 #datos de los parámetros del tráfico en la red
-                tcp_mss_default = dict_data_traffic[str(name)]['start']['tcp_mss_default']
+                #tcp_mss_default = dict_data_traffic[str(name)]['start']['tcp_mss_default']
                 sock_bufsize = dict_data_traffic[str(name)]['start']['sock_bufsize']
                 sndbuf_actual = dict_data_traffic[str(name)]['start']['sndbuf_actual']
                 rcvbuf_actual = dict_data_traffic[str(name)]['start']['rcvbuf_actual'] 
@@ -1143,6 +1143,7 @@ def interpreter(json_data, connection):
                 duration =  dict_data_traffic[str(name)]['start']['test_start']['duration']
                 num_bytes =  dict_data_traffic[str(name)]['start']['test_start']['bytes']
                 blocks =  dict_data_traffic[str(name)]['start']['test_start']['blocks']
+                
                     
                 #Resultados del Tráfico generado
                 rang = int(time_e)/int(interval)
@@ -1156,11 +1157,7 @@ def interpreter(json_data, connection):
                     end = streams['end']
                     n_bytes = streams['bytes']
                     bits_per_second = streams['bits_per_second']
-                    retransmits = streams['retransmits']
-                    snd_cwnd = streams['snd_cwnd']
-                    rtt = streams['rtt']
-                    rttvar = streams['rttvar']
-                    pmtu = streams['pmtu']
+                    packets = streams['packets']
                     omitted = streams['omitted']
                     sender = streams['sender']
 
@@ -1168,11 +1165,7 @@ def interpreter(json_data, connection):
                     data_speciffic['end'] = end
                     data_speciffic['n_bytes'] = n_bytes
                     data_speciffic['bits_per_second'] = bits_per_second
-                    data_speciffic['retransmits'] = retransmits
-                    data_speciffic['snd_cwnd'] = snd_cwnd
-                    data_speciffic['rtt'] = rtt
-                    data_speciffic['rttvar'] = rttvar
-                    data_speciffic['pmtu'] = pmtu
+                    data_speciffic['packets'] = packets
                     data_speciffic['omitted'] = str(omitted)
                     data_speciffic['sender'] = str(sender)
 
@@ -1183,7 +1176,7 @@ def interpreter(json_data, connection):
                 data_gen['local_port'] = local_port
                 data_gen['remote_host'] = remote_host
                 data_gen['remote_port'] = remote_port
-                data_gen['tcp_mss_default'] = tcp_mss_default
+                
                 data_gen['sock_bufsize'] = sock_bufsize
                 data_gen['sndbuf_actual'] = sndbuf_actual
                 data_gen['rcvbuf_actual'] = rcvbuf_actual
@@ -1201,13 +1194,6 @@ def interpreter(json_data, connection):
                 data_gen= {}
                 times = {}
                 procces_data = {}
-            #print('Trafico!!!: ', traffic)
-                    
-                    #answer_to_client = net.iperf(hosts=[x, y], l4Type='TCP', udpBw=udpBW, fmt=None, seconds=time_e, port=5001)
-                    #traffic_array[str(x)+"-"+str(y)]= answer_to_client
-                    #charge_array[c]= traffic_array
-                    #dict_answer['TCP'] = charge_array
-                    #dict_answer["TCP " + str(x)+" to "+str(y) +" " + str(c)] = answer_to_client
 
             
             f = json.dumps(traffic)
