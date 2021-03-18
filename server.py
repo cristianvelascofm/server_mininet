@@ -34,25 +34,33 @@ while True:
     print('Conexion desde: ', client_address)
 
     try:
-
+        nb_tries = 10
         # Receive the data in small chunks and retransmit it
         while True:
             print("Esperando Order ...")
+            nb_tries -= 1 
             data = b''
-            part = connection.recv(4096)
-            if part:
-                data += part
-                decode_data = data.decode('utf-8')
-                dict_data = eval(decode_data)
-                json_data = json.loads(dict_data)
-                print('++++++++++++++++++++++++++')
-                print("MENSAJE ENTRANTE:", json_data)
-                print('---------------------------')
-                aux = interpreter(json_data, connection)
+            try:
+                part = connection.recv(4096)
+                if part:
+                    data += part
+                    decode_data = data.decode('utf-8')
+                    dict_data = eval(decode_data)
+                    json_data = json.loads(dict_data)
+                    print('++++++++++++++++++++++++++')
+                    print("MENSAJE ENTRANTE:", json_data)
+                    print('---------------------------')
+                    aux = interpreter(json_data, connection)
 
-            else:
-                print('Sin Datos ...')
-                break
+                else:
+                    print('Sin Datos ...')
+                    break
+            except socket.error as e:
+                if nb_tries == 0:
+                    raise e
+                else:
+                    time.sleep(1)
+
         
             # ***-******-*****-*****-******-*****-*****-****-****-***-****
             # Esta seccion decodifica y filtra los elementos en su grupo correspondiente
@@ -65,10 +73,10 @@ while True:
             print('---------------------------')
             aux = interpreter(json_data, connection)
             #if not aux:
-                #   break'''
-    except socket.error as w:
+                #   break
+except socket.error as w:
         print('except: '+ w)
-        pass
+        pass'''
     finally:
 
         # Clean up the connection
