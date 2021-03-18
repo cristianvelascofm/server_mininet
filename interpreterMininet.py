@@ -193,7 +193,7 @@ def interpreter(json_data, connection):
             #Se colocan los host como servidor en el puerto indicado
             for host_server in host_added:
                 for port in port_list:
-                    host_server.cmd('iperf3 -s -D -p '+str(port)+' -J>'+str(host_server)+'_'+str(port)+'.json')
+                    host_server.cmd('iperf3 -s -p '+str(port)+' -J>'+str(host_server)+'_'+str(port)+'.json'+' &')
                     time.sleep(3)
                     aux = [host_server, port]
                     aux_array.append(aux)
