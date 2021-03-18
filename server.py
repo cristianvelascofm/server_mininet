@@ -42,8 +42,8 @@ while True:
             part = connection.recv(65000)
             if part:
                 data += part
-            if not data:
-                print('Sin datos ...')
+            else:
+                print('Sin Datos ...')
                 break
         
             # ***-******-*****-*****-******-*****-*****-****-****-***-****
