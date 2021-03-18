@@ -39,7 +39,7 @@ while True:
         while True:
             print("Esperando Order ...")
             data = b''
-            part = connection.recv(65000)
+            part = connection.recv(4096)
             if part:
                 data += part
             else:
@@ -58,8 +58,8 @@ while True:
             aux = interpreter(json_data, connection)
             #if not aux:
                 #   break
-
-
+    except:
+        
         pass
     finally:
 
