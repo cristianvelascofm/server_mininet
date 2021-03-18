@@ -176,7 +176,9 @@ def interpreter(json_data, connection):
             
 
             name_files = []
+            name_files_server = []
             dict_data_traffic = {}
+            dict_data_traffic_server = {}
 
             file_traffic= []
             data_traffic={}
@@ -195,6 +197,7 @@ def interpreter(json_data, connection):
                 for port in port_list:
                     host_server.cmd('iperf3 -s -p '+str(port)+' -J>'+str(host_server)+'_'+str(port)+'.json'+' &')
                     time.sleep(3)
+                    name_files_server.append(str(host_server)+'_'+str(port))
                     aux = [host_server, port]
                     aux_array.append(aux)
 
@@ -563,13 +566,104 @@ def interpreter(json_data, connection):
                             
         #Tiempo de espera para q se generen por completo los archivos JSON
             time.sleep(int(time_e) + 5)
+
+            #Abre el archivo correspondiente al trafico de los clientes y lo pasa a Dict
             for name in name_files:
+                    
                     archive_json = json.loads(open(str(name)+'.json').read())
+                    
                     dict_data_traffic[str(name)] = archive_json
 
-            #print(dict_data_traffic)
-            #print('Keys Dict: ',dict_data_traffic.keys())
+            #Abre el archivo correspondiente al trafico de los servidores y lo pasa a Dict
+            for name_server in name_files_server:
+                    
+                    archive_json_server = json.loads(open(str(name_server)+'.json').read())
+                    
+                    dict_data_traffic_server[str(name_server)] = archive_json_server
+
+
+
+
+            #Diccionario que almacena la respueta para Django
             traffic = {}
+            #Carga los archivos del cliente a un dict para la respuesta del servidor a Django
+            for name_server in name_files_server:
+                #print(str(name))
+                connected = dict_data_traffic_server[str(name_server)]['start']['connected'][0]
+                #print('tipo: ', type(connected))
+
+                #datos del host que actua como transmisor
+                local_host = connected['local_host']
+                local_port = connected['local_port']
+
+                #datos del host que actua como servidor
+                remote_host = dict_data_traffic_server[str(name_server)]['start']['connecting_to']['host']
+                remote_port = dict_data_traffic_server[str(name_server)]['start']['connecting_to']['port']
+
+                #datos de los parámetros del tráfico en la red
+                tcp_mss_default = dict_data_traffic_server[str(name_server)]['start']['tcp_mss_default']
+                sock_bufsize = dict_data_traffic_server[str(name_server)]['start']['sock_bufsize']
+                sndbuf_actual = dict_data_traffic_server[str(name_server)]['start']['sndbuf_actual']
+                rcvbuf_actual = dict_data_traffic_server[str(name_server)]['start']['rcvbuf_actual'] 
+
+                #datos del inicio del Test
+                protocol = dict_data_traffic_server[str(name_server)]['start']['test_start']['protocol']
+                blksize =  dict_data_traffic_server[str(name_server)]['start']['test_start']['blksize']
+                omit =  dict_data_traffic_server[str(name_server)]['start']['test_start']['omit']
+                duration =  dict_data_traffic_server[str(name_server)]['start']['test_start']['duration']
+                num_bytes =  dict_data_traffic_server[str(name_server)]['start']['test_start']['bytes']
+                blocks =  dict_data_traffic_server[str(name_server)]['start']['test_start']['blocks']
+                    
+                #Resultados del Tráfico generado
+                rang = int(time_e)/int(interval)
+                intervals = dict_data_traffic_server[str(name_server)]['intervals']
+                times = {}
+                data_speciffic= {}
+
+                for t in range(rang):
+                    streams = intervals[t]['streams'][0]
+                    start = streams['start']
+                    end = streams['end']
+                    n_bytes = streams['bytes']
+                    bits_per_second = streams['bits_per_second']
+                    omitted = streams['omitted']
+                    sender = streams['sender']
+
+                    data_speciffic['start'] = start
+                    data_speciffic['end'] = end
+                    data_speciffic['n_bytes'] = n_bytes
+                    data_speciffic['bits_per_second'] = bits_per_second
+                    data_speciffic['omitted'] = str(omitted)
+                    data_speciffic['sender'] = str(sender)
+
+                    times['t_'+str(t)] = data_speciffic
+                    data_speciffic = {}
+
+                data_gen['local_host'] = local_host
+                data_gen['local_port'] = local_port
+                data_gen['remote_host'] = remote_host
+                data_gen['remote_port'] = remote_port
+                data_gen['tcp_mss_default'] = tcp_mss_default
+                data_gen['sock_bufsize'] = sock_bufsize
+                data_gen['sndbuf_actual'] = sndbuf_actual
+                data_gen['rcvbuf_actual'] = rcvbuf_actual
+                data_gen['protocol'] = protocol
+                data_gen['blksize'] = blksize
+                data_gen['omit'] = omit
+                data_gen['duration'] = duration
+                data_gen['num_bytes'] = num_bytes
+                data_gen['blocks'] = blocks
+                procces_data['speciffic'] = times
+                procces_data['general']= data_gen
+                
+                traffic[str(name_server)] = procces_data
+                
+                data_gen= {}
+                times = {}
+                procces_data = {}
+
+
+            #Carga los archivos a un diccionario para la respuesta del servidor a Django
             for name in name_files:
                 #print(str(name))
                 connected = dict_data_traffic[str(name)]['start']['connected'][0]
@@ -667,6 +761,8 @@ def interpreter(json_data, connection):
             connection.sendall(f.encode())
             dict_answer = {}
             traffic = {}
+            dict_data_traffic = {}
+            dict_data_traffic_server = {}
             answer_to_client = None
             return True
 
