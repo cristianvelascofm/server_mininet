@@ -49,6 +49,31 @@ host_sender = None
 #net = Mininet(build=False)
 net = Mininet()
 
+
+
+def run_recvITG(listen):
+    #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin/.')
+    command_itg_receiver = net.getNodeByName(listen).cmd('./D-ITG-2.8.1-r1023/bin/ITGRecv')
+    #p = os.system('echo %s|sudo -S %s' % ('123', command_itg_receiver))
+
+def run_sendITG(name_host):
+    #os.chdir('/home/mininet/D-ITG-2.8.1-r1023/bin')
+    command = net.getNodeByName(name_host).cmd('./D-ITG-2.8.1-r1023/bin/ITGSend -T UDP -a 10.0.0.1 -c 100 -C 10 -t 15000 -l enviando.log -x recibiendo.log')
+    #p = os.system('echo %s|sudo -S %s' % ('123', command))
+
+def run_decoITG(listen):
+    comman= None
+    net.getNodeByName(listen).cmd('cd /home/mininet/D-ITG-2.8.1-r1023/bin/')
+    comman = net.getNodeByName(listen).cmd('ls-')
+    return comman
+
+def run_server_iperf(host):
+    command= None
+    net.getNodeByName(host).cmd('iperf3 -s')
+
+def run_client_iperf(host):
+    pass
+
 def run_mininet():
     
     print('Creacion de la Red ...')

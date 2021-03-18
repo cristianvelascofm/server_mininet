@@ -38,26 +38,28 @@ while True:
         # Receive the data in small chunks and retransmit it
         while True:
             print("Esperando Order ...")
-            data = connection.recv(65000)
-
+            data = b''
+            part = connection.recv(65000)
+            if part:
+                data += part
             if not data:
                 print('Sin datos ...')
                 break
-            else:
-                # ***-******-*****-*****-******-*****-*****-****-****-***-****
-                # Esta seccion decodifica y filtra los elementos en su grupo correspondiente
-                # ***-******-*****-*****-******-*****-*****-****-****-***-****
-                decode_data = data.decode()
-                dict_data = eval(decode_data)
-                json_data = json.loads(dict_data)
-                print('++++++++++++++++++++++++++')
-                print("MENSAJE ENTRANTE:", json_data)
-                print('---------------------------')
-                aux = interpreter(json_data, connection)
-                #if not aux:
-                 #   break
+        
+            # ***-******-*****-*****-******-*****-*****-****-****-***-****
+            # Esta seccion decodifica y filtra los elementos en su grupo correspondiente
+            # ***-******-*****-*****-******-*****-*****-****-****-***-****
+            decode_data = data.decode()
+            dict_data = eval(decode_data)
+            json_data = json.loads(dict_data)
+            print('++++++++++++++++++++++++++')
+            print("MENSAJE ENTRANTE:", json_data)
+            print('---------------------------')
+            aux = interpreter(json_data, connection)
+            #if not aux:
+                #   break
 
-    
+
         pass
     finally:
 
