@@ -42,7 +42,7 @@ while True:
             part = connection.recv(4096)
             if part:
                 data += part
-                decode_data = data.decode()
+                decode_data = data.decode('utf-8')
                 dict_data = eval(decode_data)
                 json_data = json.loads(dict_data)
                 print('++++++++++++++++++++++++++')
@@ -66,8 +66,8 @@ while True:
             aux = interpreter(json_data, connection)
             #if not aux:
                 #   break'''
-    except:
-        
+    except socket.error as w:
+        print('except: '+ w)
         pass
     finally:
 
