@@ -597,8 +597,8 @@ def interpreter(json_data, connection):
                 local_port = connected['local_port']
 
                 #datos del host que actua como servidor
-                remote_host = dict_data_traffic_server[str(name_server)]['start']['connecting_to']['host']
-                remote_port = dict_data_traffic_server[str(name_server)]['start']['connecting_to']['port']
+                #remote_host = dict_data_traffic_server[str(name_server)]['start']['connecting_to']['host']
+                #remote_port = dict_data_traffic_server[str(name_server)]['start']['connecting_to']['port']
 
                 #datos de los parámetros del tráfico en la red
                 tcp_mss_default = dict_data_traffic_server[str(name_server)]['start']['tcp_mss_default']
@@ -641,8 +641,8 @@ def interpreter(json_data, connection):
 
                 data_gen['local_host'] = local_host
                 data_gen['local_port'] = local_port
-                data_gen['remote_host'] = remote_host
-                data_gen['remote_port'] = remote_port
+                #data_gen['remote_host'] = remote_host
+                #data_gen['remote_port'] = remote_port
                 data_gen['tcp_mss_default'] = tcp_mss_default
                 data_gen['sock_bufsize'] = sock_bufsize
                 data_gen['sndbuf_actual'] = sndbuf_actual
