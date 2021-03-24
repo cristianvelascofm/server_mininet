@@ -20,7 +20,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Creador de elementos en mininet
 # Bind the socket to the port
-server_adress = ('192.168.56.101', 10000)
+server_adress = ('192.168.56.102', 10000)
 print('Iniciando Servidor: {} en el puerto: {}'.format(*server_adress))
 sock.bind(server_adress)
 
