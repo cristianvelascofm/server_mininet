@@ -41,7 +41,7 @@ while True:
             nb_tries -= 1 
             data = b''
             try:
-                part = connection.recv(4096)
+                part = connection.recv(65000)
                 if part:
                     data += part
                     decode_data = data.decode('utf-8')
