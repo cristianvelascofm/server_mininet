@@ -80,17 +80,14 @@ def run_mininet():
     net.start()
     print('RED INICIADA!! ...')
 
-stop_whireshark = False
-def wireshark_launcher(stop):    
-    while True:
-        run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
+
+def wireshark_launcher():
+    run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
         
-        if(stop_whireshark):
-            break
 
 
 # Creacion del hilo para lanzar Wireshark
-w = threading.Thread(target=wireshark_launcher, args=(lambda : stop_whireshark,))
+w = threading.Thread(target=wireshark_launcher,)
 
 # Creacion de hilos para el generador de tráfico ITG
 
@@ -108,8 +105,8 @@ def interpreter(json_data, connection):
             print("Terminando Emulacion ...")
             #CLI(net,script= "stop.sh")
             net.stop()
-            stop_whireshark = True
-            w.join()
+            
+            
             ans = {}
             ans['emulacion'] = 'terminada'
             f = json.dumps(ans)
