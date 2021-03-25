@@ -616,12 +616,12 @@ def interpreter(json_data, connection):
                     
                 #Resultados del Tráfico generado
                 rang = int(time_e)/int(interval)
-                print('Range: ', rang)
+                
                 intervals = dict_data_traffic_server[str(name_server)]['intervals']
                 times = {}
                 data_speciffic= {}
 
-                for t in range(rang):
+                for t in range(int(rang)):
                     streams = intervals[t]['streams'][0]
                     start = streams['start']
                     end = streams['end']
@@ -698,7 +698,7 @@ def interpreter(json_data, connection):
                 times = {}
                 data_speciffic= {}
 
-                for t in range(rang):
+                for t in range(int(rang)):
                     streams = intervals[t]['streams'][0]
                     start = streams['start']
                     end = streams['end']
