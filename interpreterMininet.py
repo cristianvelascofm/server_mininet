@@ -80,11 +80,15 @@ def run_mininet():
     net.start()
     print('RED INICIADA!! ...')
 
-
-def wireshark_launcher():
-    run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
-
 stop_whireshark = False
+def wireshark_launcher(stop):    
+    while True:
+        run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
+        
+        if(stop_whireshark):
+            break
+
+
 # Creacion del hilo para lanzar Wireshark
 w = threading.Thread(target=wireshark_launcher, args=(lambda : stop_whireshark,))
 
