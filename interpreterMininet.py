@@ -47,38 +47,6 @@ host_sender = None
 # Creacion de la red en Mininet
 net = Mininet(build=False)
 
-def traffic_udp_simple():
-    file = open("udp.sh", "w")
-    file.write("iperfudp"+'\n')
-    file.close()
-
-
-def traffic_tcp_total():
-    aux = ""
-    for x in host_container:
-        for y in host_container:
-            if str(x) == str(y):
-                pass
-            else:
-                aux = aux + "iperf "+str(x) + " " + str(y) + "\n"
-    file = open("tcp.sh", "w")
-    file.write(aux)
-    file.close()
-
-
-def traffic_udp_total():
-    aux = ""
-    for x in host_container:
-        for y in host_container:
-            if str(x) == str(y):
-                pass
-            else:
-                aux = aux + "iperfudp "+ "1024 "+str(x) + " " + str(y) + "\n"
-    file = open("udp.sh", "w")
-    file.write(aux)
-    file.close()
-
-
 def run_mininet():
     
     print('Creacion de la Red ...')
@@ -116,9 +84,9 @@ def run_mininet():
 def wireshark_launcher():
     run_wireshark = subprocess.call(['wireshark-gtk', '-S'])
 
-
+stop_whireshark = False
 # Creacion del hilo para lanzar Wireshark
-w = threading.Thread(target=wireshark_launcher,)
+w = threading.Thread(target=wireshark_launcher, args=(lambda : stop_whireshark,))
 
 # Creacion de hilos para el generador de tráfico ITG
 
@@ -136,6 +104,8 @@ def interpreter(json_data, connection):
             print("Terminando Emulacion ...")
             #CLI(net,script= "stop.sh")
             net.stop()
+            stop_whireshark = True
+            w.join()
             ans = {}
             ans['emulacion'] = 'terminada'
             f = json.dumps(ans)
